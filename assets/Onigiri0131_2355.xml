@@ -1,0 +1,355 @@
+<ns0:pmxstatus xmlns:ns0="local" xml:lang="jp"><pmdinfo><name>onigiri0131_2355</name><name_e>onigiri0131_2355</name_e><comment>　MMO-RPG「鬼斬」絶賛サービス中！！！ http://onigiri-online.jp
+
+　※このモデルは、鬼斬のプレイヤーキャラをMikuMikuDance用モデルに自動書き出ししたモデルデータです。
+　以下のガイドラインに基づいてご利用下さい。
+　http://onigiri.cyberstep.jp/other/rfd</comment><comment_e>naaaasi</comment_e></pmdinfo>
+<morphs><!--表情グループ 0:使用不可 1:まゆ 2:目 3:リップ 4:その他-->
+<morph b_name="あ" group="3" index="0" name="あ" name_e="M" />
+<morph b_name="い" group="3" index="1" name="い" name_e="M" />
+<morph b_name="う" group="3" index="2" name="う" name_e="M" />
+<morph b_name="え" group="3" index="3" name="え" name_e="M" />
+<morph b_name="お" group="3" index="4" name="お" name_e="M" />
+<morph b_name="にやり" group="3" index="5" name="にやり" name_e="M" />
+<morph b_name="え-" group="3" index="6" name="え-" name_e="M" />
+<morph b_name="まばたき" group="2" index="7" name="まばたき" name_e="M" />
+<morph b_name="笑い" group="2" index="8" name="笑い" name_e="M" />
+<morph b_name="ウインク右" group="2" index="9" name="ウインク右" name_e="M" />
+<morph b_name="ｳｨﾝｸ２右" group="2" index="10" name="ｳｨﾝｸ２右" name_e="M" />
+<morph b_name="真面目" group="1" index="11" name="真面目" name_e="M" />
+<morph b_name="困る" group="1" index="12" name="困る" name_e="M" />
+<morph b_name="怒り" group="1" index="13" name="怒り" name_e="M" />
+<morph b_name="上" group="1" index="14" name="上" name_e="M" />
+<morph b_name="m_sad" group="1" index="15" name="m_sad" name_e="M" />
+<morph b_name="cheek" group="1" index="16" name="cheek" name_e="M" />
+<morph b_name="m_laugh" group="1" index="17" name="m_laugh" name_e="M" />
+<morph b_name="eye_wonder" group="1" index="18" name="eye_wonder" name_e="M" />
+</morphs>
+<bones><bone add_move="0" add_rot="0" b_name="センター" fixed_axis="0" ik="0" index="0" local_axis="0" movable="1" name="センター" name_e="sentaa-" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="上半身" fixed_axis="0" ik="0" index="1" local_axis="0" movable="1" name="上半身" name_e="Spine1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="下半身" fixed_axis="0" ik="0" index="2" local_axis="0" movable="1" name="下半身" name_e="waist" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Spine2" fixed_axis="0" ik="0" index="3" local_axis="0" movable="1" name="Spine2" name_e="Spine2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足_R" fixed_axis="0" ik="0" index="4" local_axis="0" movable="1" name="右足" name_e="RThigh" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足_L" fixed_axis="0" ik="0" index="5" local_axis="0" movable="1" name="左足" name_e="LThigh" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="Chest" fixed_axis="0" ik="0" index="6" local_axis="0" movable="1" name="Chest" name_e="Chest" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="ひざ_R" fixed_axis="0" ik="0" index="7" local_axis="0" movable="1" name="右ひざ" name_e="RShin" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="ひざ_L" fixed_axis="0" ik="0" index="8" local_axis="0" movable="1" name="左ひざ" name_e="LShin" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="肩_R" fixed_axis="0" ik="0" index="9" local_axis="0" movable="1" name="右肩" name_e="RShoulder" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足首_L" fixed_axis="0" ik="0" index="10" local_axis="0" movable="1" name="左足首" name_e="LFootBone1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足首_R" fixed_axis="0" ik="0" index="11" local_axis="0" movable="1" name="右足首" name_e="RFootBone1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="肩_L" fixed_axis="0" ik="0" index="12" local_axis="0" movable="1" name="左肩" name_e="LShoulder" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="首" fixed_axis="0" ik="0" index="13" local_axis="0" movable="1" name="首" name_e="neck1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="腕_R" fixed_axis="0" ik="0" index="14" local_axis="0" movable="1" name="右腕" name_e="RBicep" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="つま先_L" fixed_axis="0" ik="0" index="15" local_axis="0" movable="1" name="左つま先" name_e="LFootBone2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="頭" fixed_axis="0" ik="0" index="16" local_axis="0" movable="1" name="頭" name_e="head1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="つま先_R" fixed_axis="0" ik="0" index="17" local_axis="0" movable="1" name="右つま先" name_e="RFootBone2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="腕_L" fixed_axis="0" ik="0" index="18" local_axis="0" movable="1" name="左腕" name_e="LBicep" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="ひじ_L" fixed_axis="0" ik="0" index="19" local_axis="0" movable="1" name="左ひじ" name_e="LForearm" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="ひじ_R" fixed_axis="0" ik="0" index="20" local_axis="0" movable="1" name="右ひじ" name_e="RForearm" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="手首_R" fixed_axis="0" ik="0" index="21" local_axis="0" movable="1" name="右手首" name_e="RHand" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="手首_L" fixed_axis="0" ik="0" index="22" local_axis="0" movable="1" name="左手首" name_e="LHand" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="RHandWeapon" fixed_axis="0" ik="0" index="23" local_axis="0" movable="1" name="RHandWeapon" name_e="RHandWeapon" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="LHandWeapon" fixed_axis="0" ik="0" index="24" local_axis="0" movable="1" name="LHandWeapon" name_e="LHandWeapon" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指１_R" fixed_axis="0" ik="0" index="25" local_axis="0" movable="1" name="右薬指１" name_e="RRing1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指１_L" fixed_axis="0" ik="0" index="26" local_axis="0" movable="1" name="左人指１" name_e="LIndex1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指１_L" fixed_axis="0" ik="0" index="27" local_axis="0" movable="1" name="左薬指１" name_e="LRing1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指１_R" fixed_axis="0" ik="0" index="28" local_axis="0" movable="1" name="右人指１" name_e="RIndex1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指１_L" fixed_axis="0" ik="0" index="29" local_axis="0" movable="1" name="左親指１" name_e="LThumb1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指１_R" fixed_axis="0" ik="0" index="30" local_axis="0" movable="1" name="右親指１" name_e="RThumb1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指２_L" fixed_axis="0" ik="0" index="31" local_axis="0" movable="1" name="左親指２" name_e="LThumb2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指２_R" fixed_axis="0" ik="0" index="32" local_axis="0" movable="1" name="右親指２" name_e="RThumb2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指２_R" fixed_axis="0" ik="0" index="33" local_axis="0" movable="1" name="右人指２" name_e="RIndex2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指２_L" fixed_axis="0" ik="0" index="34" local_axis="0" movable="1" name="左薬指２" name_e="LRing2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指２_L" fixed_axis="0" ik="0" index="35" local_axis="0" movable="1" name="左人指２" name_e="LIndex2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指２_R" fixed_axis="0" ik="0" index="36" local_axis="0" movable="1" name="右薬指２" name_e="RRing2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指３_L" fixed_axis="0" ik="0" index="37" local_axis="0" movable="1" name="左人指３" name_e="LIndex3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指３_L" fixed_axis="0" ik="0" index="38" local_axis="0" movable="1" name="左薬指３" name_e="LRing3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="人指３_R" fixed_axis="0" ik="0" index="39" local_axis="0" movable="1" name="右人指３" name_e="RIndex3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指先_R" fixed_axis="0" ik="0" index="40" local_axis="0" movable="1" name="右親指先" name_e="RThumb3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="薬指３_R" fixed_axis="0" ik="0" index="41" local_axis="0" movable="1" name="右薬指３" name_e="RRing3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="親指先_L" fixed_axis="0" ik="0" index="42" local_axis="0" movable="1" name="左親指先" name_e="LThumb3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="no_move" fixed_axis="0" ik="0" index="43" local_axis="0" movable="1" name="no_move" name_e="no_move" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_R_side" fixed_axis="0" ik="0" index="44" local_axis="0" movable="1" name="phy_R_side" name_e="phy_R_side" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_L_side" fixed_axis="0" ik="0" index="45" local_axis="0" movable="1" name="phy_L_side" name_e="phy_L_side" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_R_hair" fixed_axis="0" ik="0" index="46" local_axis="0" movable="1" name="phy_R_hair" name_e="phy_R_hair" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_L_hair" fixed_axis="0" ik="0" index="47" local_axis="0" movable="1" name="phy_L_hair" name_e="phy_L_hair" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_R_hair2" fixed_axis="0" ik="0" index="48" local_axis="0" movable="1" name="phy_R_hair2" name_e="phy_R_hair2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_L_hair2" fixed_axis="0" ik="0" index="49" local_axis="0" movable="1" name="phy_L_hair2" name_e="phy_L_hair2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_R_hair3" fixed_axis="0" ik="0" index="50" local_axis="0" movable="1" name="phy_R_hair3" name_e="phy_R_hair3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_L_hair3" fixed_axis="0" ik="0" index="51" local_axis="0" movable="1" name="phy_L_hair3" name_e="phy_L_hair3" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Fskirt" fixed_axis="0" ik="0" index="52" local_axis="0" movable="1" name="phy_Fskirt" name_e="phy_Fskirt" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt1" fixed_axis="0" ik="0" index="53" local_axis="0" movable="1" name="phy_Lskirt1" name_e="phy_Lskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt1" fixed_axis="0" ik="0" index="54" local_axis="0" movable="1" name="phy_Rskirt1" name_e="phy_Rskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt1" fixed_axis="0" ik="0" index="55" local_axis="0" movable="1" name="phy_Bskirt1" name_e="phy_Bskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_body" fixed_axis="0" ik="0" index="56" local_axis="0" movable="1" name="phy_body" name_e="phy_body" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt2" fixed_axis="0" ik="0" index="57" local_axis="0" movable="1" name="phy_Lskirt2" name_e="phy_Lskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt2" fixed_axis="0" ik="0" index="58" local_axis="0" movable="1" name="phy_Rskirt2" name_e="phy_Rskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt2" fixed_axis="0" ik="0" index="59" local_axis="0" movable="1" name="phy_Bskirt2" name_e="phy_Bskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="arm_no_move" fixed_axis="0" ik="0" index="60" local_axis="0" movable="1" name="arm_no_move" name_e="arm_no_move" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_arm" fixed_axis="0" ik="0" index="61" local_axis="0" movable="1" name="phy_arm" name_e="phy_arm" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Fskirt" fixed_axis="0" ik="0" index="62" local_axis="0" movable="1" name="phy_Fskirt" name_e="phy_Fskirt" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt1" fixed_axis="0" ik="0" index="63" local_axis="0" movable="1" name="phy_Lskirt1" name_e="phy_Lskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt1" fixed_axis="0" ik="0" index="64" local_axis="0" movable="1" name="phy_Rskirt1" name_e="phy_Rskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt1" fixed_axis="0" ik="0" index="65" local_axis="0" movable="1" name="phy_Bskirt1" name_e="phy_Bskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_body" fixed_axis="0" ik="0" index="66" local_axis="0" movable="1" name="phy_body" name_e="phy_body" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt2" fixed_axis="0" ik="0" index="67" local_axis="0" movable="1" name="phy_Lskirt2" name_e="phy_Lskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt2" fixed_axis="0" ik="0" index="68" local_axis="0" movable="1" name="phy_Rskirt2" name_e="phy_Rskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt2" fixed_axis="0" ik="0" index="69" local_axis="0" movable="1" name="phy_Bskirt2" name_e="phy_Bskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="arm_no_move" fixed_axis="0" ik="0" index="70" local_axis="0" movable="1" name="arm_no_move" name_e="arm_no_move" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_arm" fixed_axis="0" ik="0" index="71" local_axis="0" movable="1" name="phy_arm" name_e="phy_arm" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt1" fixed_axis="0" ik="0" index="72" local_axis="0" movable="1" name="phy_Bskirt1" name_e="phy_Bskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt1" fixed_axis="0" ik="0" index="73" local_axis="0" movable="1" name="phy_Rskirt1" name_e="phy_Rskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt1" fixed_axis="0" ik="0" index="74" local_axis="0" movable="1" name="phy_Lskirt1" name_e="phy_Lskirt1" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Fskirt" fixed_axis="0" ik="0" index="75" local_axis="0" movable="1" name="phy_Fskirt" name_e="phy_Fskirt" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_body" fixed_axis="0" ik="0" index="76" local_axis="0" movable="1" name="phy_body" name_e="phy_body" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lskirt2" fixed_axis="0" ik="0" index="77" local_axis="0" movable="1" name="phy_Lskirt2" name_e="phy_Lskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rskirt2" fixed_axis="0" ik="0" index="78" local_axis="0" movable="1" name="phy_Rskirt2" name_e="phy_Rskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Bskirt2" fixed_axis="0" ik="0" index="79" local_axis="0" movable="1" name="phy_Bskirt2" name_e="phy_Bskirt2" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="arm_no_move" fixed_axis="0" ik="0" index="80" local_axis="0" movable="1" name="arm_no_move" name_e="arm_no_move" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_arm" fixed_axis="0" ik="0" index="81" local_axis="0" movable="1" name="phy_arm" name_e="phy_arm" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="no_move" fixed_axis="0" ik="0" index="82" local_axis="0" movable="1" name="no_move" name_e="no_move" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lribbon" fixed_axis="0" ik="0" index="83" local_axis="0" movable="1" name="phy_Lribbon" name_e="phy_Lribbon" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rribbon" fixed_axis="0" ik="0" index="84" local_axis="0" movable="1" name="phy_Rribbon" name_e="phy_Rribbon" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Lear" fixed_axis="0" ik="0" index="85" local_axis="0" movable="1" name="phy_Lear" name_e="phy_Lear" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="phy_Rear" fixed_axis="0" ik="0" index="86" local_axis="0" movable="1" name="phy_Rear" name_e="phy_Rear" operational="1" power="1.0" rotatable="0" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足ＩＫ_R" fixed_axis="0" ik="1" index="87" local_axis="0" movable="1" name="右足ＩＫ" name_e="" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="足ＩＫ_L" fixed_axis="0" ik="1" index="88" local_axis="0" movable="1" name="左足ＩＫ" name_e="" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="つま先ＩＫ_R" fixed_axis="0" ik="1" index="89" local_axis="0" movable="1" name="右つま先ＩＫ" name_e="" operational="1" power="1.0" rotatable="1" visible="1" />
+<bone add_move="0" add_rot="0" b_name="つま先ＩＫ_L" fixed_axis="0" ik="1" index="90" local_axis="0" movable="1" name="左つま先ＩＫ" name_e="" operational="1" power="1.0" rotatable="1" visible="1" />
+</bones>
+<labels>
+<label index="0" name="Root" name_e="Root" type="1"><tab index="0" name="センター" type="bone" />
+</label>
+<label index="1" name="表情" name_e="Exp" type="1"><tab index="0" name="あ" type="morph" />
+<tab index="1" name="い" type="morph" />
+<tab index="2" name="う" type="morph" />
+<tab index="3" name="え" type="morph" />
+<tab index="4" name="お" type="morph" />
+<tab index="5" name="にやり" type="morph" />
+<tab index="6" name="え-" type="morph" />
+<tab index="7" name="まばたき" type="morph" />
+<tab index="8" name="笑い" type="morph" />
+<tab index="9" name="ウインク右" type="morph" />
+<tab index="10" name="ｳｨﾝｸ２右" type="morph" />
+<tab index="11" name="真面目" type="morph" />
+<tab index="12" name="困る" type="morph" />
+<tab index="13" name="怒り" type="morph" />
+<tab index="14" name="上" type="morph" />
+<tab index="15" name="m_sad" type="morph" />
+<tab index="16" name="cheek" type="morph" />
+<tab index="17" name="m_laugh" type="morph" />
+<tab index="18" name="eye_wonder" type="morph" />
+</label>
+<label index="2" name="ＩＫ" name_e="IK" type="0"><tab index="0" name="足ＩＫ_L" type="bone" />
+<tab index="1" name="足ＩＫ_R" type="bone" />
+<tab index="2" name="つま先ＩＫ_L" type="bone" />
+<tab index="3" name="つま先ＩＫ_R" type="bone" />
+</label>
+<label index="3" name="体" name_e="Body" type="0"><tab index="0" name="頭" type="bone" />
+<tab index="1" name="上半身" type="bone" />
+<tab index="2" name="下半身" type="bone" />
+<tab index="3" name="首" type="bone" />
+</label>
+<label index="4" name="腕" name_e="Arms" type="0"><tab index="0" name="肩_L" type="bone" />
+<tab index="1" name="肩_R" type="bone" />
+<tab index="2" name="手首_L" type="bone" />
+<tab index="3" name="手首_R" type="bone" />
+<tab index="4" name="腕_L" type="bone" />
+<tab index="5" name="ひじ_L" type="bone" />
+<tab index="6" name="腕_R" type="bone" />
+<tab index="7" name="ひじ_R" type="bone" />
+<tab index="8" name="手首_L" type="bone" />
+<tab index="9" name="手首_R" type="bone" />
+</label>
+<label index="5" name="指" name_e="Fingers" type="0"><tab index="0" name="親指１_L" type="bone" />
+<tab index="1" name="親指２_L" type="bone" />
+<tab index="2" name="人指１_L" type="bone" />
+<tab index="3" name="人指２_L" type="bone" />
+<tab index="4" name="人指３_L" type="bone" />
+<tab index="5" name="薬指１_L" type="bone" />
+<tab index="6" name="薬指２_L" type="bone" />
+<tab index="7" name="薬指３_L" type="bone" />
+<tab index="8" name="親指１_R" type="bone" />
+<tab index="9" name="親指２_R" type="bone" />
+<tab index="10" name="人指１_R" type="bone" />
+<tab index="11" name="人指２_R" type="bone" />
+<tab index="12" name="人指３_R" type="bone" />
+<tab index="13" name="薬指１_R" type="bone" />
+<tab index="14" name="薬指２_R" type="bone" />
+<tab index="15" name="薬指３_R" type="bone" />
+</label>
+<label index="6" name="足" name_e="Legs" type="0"><tab index="0" name="足_L" type="bone" />
+<tab index="1" name="ひざ_L" type="bone" />
+<tab index="2" name="足首_L" type="bone" />
+<tab index="3" name="足_R" type="bone" />
+<tab index="4" name="ひざ_R" type="bone" />
+<tab index="5" name="足首_R" type="bone" />
+</label>
+<label index="7" name="ボーン" name_e="Bones" type="0"><tab index="0" name="センター" type="bone" />
+<tab index="1" name="上半身" type="bone" />
+<tab index="2" name="下半身" type="bone" />
+<tab index="3" name="Spine2" type="bone" />
+<tab index="4" name="足_R" type="bone" />
+<tab index="5" name="足_L" type="bone" />
+<tab index="6" name="Chest" type="bone" />
+<tab index="7" name="ひざ_R" type="bone" />
+<tab index="8" name="ひざ_L" type="bone" />
+<tab index="9" name="肩_R" type="bone" />
+<tab index="10" name="足首_L" type="bone" />
+<tab index="11" name="足首_R" type="bone" />
+<tab index="12" name="肩_L" type="bone" />
+<tab index="13" name="首" type="bone" />
+<tab index="14" name="腕_R" type="bone" />
+<tab index="15" name="つま先_L" type="bone" />
+<tab index="16" name="頭" type="bone" />
+<tab index="17" name="つま先_R" type="bone" />
+<tab index="18" name="腕_L" type="bone" />
+<tab index="19" name="ひじ_L" type="bone" />
+<tab index="20" name="ひじ_R" type="bone" />
+<tab index="21" name="手首_R" type="bone" />
+<tab index="22" name="手首_L" type="bone" />
+<tab index="23" name="RHandWeapon" type="bone" />
+<tab index="24" name="LHandWeapon" type="bone" />
+<tab index="25" name="薬指１_R" type="bone" />
+<tab index="26" name="人指１_L" type="bone" />
+<tab index="27" name="薬指１_L" type="bone" />
+<tab index="28" name="人指１_R" type="bone" />
+<tab index="29" name="親指１_L" type="bone" />
+<tab index="30" name="親指１_R" type="bone" />
+<tab index="31" name="親指２_L" type="bone" />
+<tab index="32" name="親指２_R" type="bone" />
+<tab index="33" name="人指２_R" type="bone" />
+<tab index="34" name="薬指２_L" type="bone" />
+<tab index="35" name="人指２_L" type="bone" />
+<tab index="36" name="薬指２_R" type="bone" />
+<tab index="37" name="人指３_L" type="bone" />
+<tab index="38" name="薬指３_L" type="bone" />
+<tab index="39" name="人指３_R" type="bone" />
+<tab index="40" name="親指先_R" type="bone" />
+<tab index="41" name="薬指３_R" type="bone" />
+<tab index="42" name="親指先_L" type="bone" />
+<tab index="43" name="no_move" type="bone" />
+<tab index="44" name="phy_R_side" type="bone" />
+<tab index="45" name="phy_L_side" type="bone" />
+<tab index="46" name="phy_R_hair" type="bone" />
+<tab index="47" name="phy_L_hair" type="bone" />
+<tab index="48" name="phy_R_hair2" type="bone" />
+<tab index="49" name="phy_L_hair2" type="bone" />
+<tab index="50" name="phy_R_hair3" type="bone" />
+<tab index="51" name="phy_L_hair3" type="bone" />
+<tab index="52" name="phy_Fskirt" type="bone" />
+<tab index="53" name="phy_Lskirt1" type="bone" />
+<tab index="54" name="phy_Rskirt1" type="bone" />
+<tab index="55" name="phy_Bskirt1" type="bone" />
+<tab index="56" name="phy_body" type="bone" />
+<tab index="57" name="phy_Lskirt2" type="bone" />
+<tab index="58" name="phy_Rskirt2" type="bone" />
+<tab index="59" name="phy_Bskirt2" type="bone" />
+<tab index="60" name="arm_no_move" type="bone" />
+<tab index="61" name="phy_arm" type="bone" />
+<tab index="62" name="phy_Fskirt" type="bone" />
+<tab index="63" name="phy_Lskirt1" type="bone" />
+<tab index="64" name="phy_Rskirt1" type="bone" />
+<tab index="65" name="phy_Bskirt1" type="bone" />
+<tab index="66" name="phy_body" type="bone" />
+<tab index="67" name="phy_Lskirt2" type="bone" />
+<tab index="68" name="phy_Rskirt2" type="bone" />
+<tab index="69" name="phy_Bskirt2" type="bone" />
+<tab index="70" name="arm_no_move" type="bone" />
+<tab index="71" name="phy_arm" type="bone" />
+<tab index="72" name="phy_Bskirt1" type="bone" />
+<tab index="73" name="phy_Rskirt1" type="bone" />
+<tab index="74" name="phy_Lskirt1" type="bone" />
+<tab index="75" name="phy_Fskirt" type="bone" />
+<tab index="76" name="phy_body" type="bone" />
+<tab index="77" name="phy_Lskirt2" type="bone" />
+<tab index="78" name="phy_Rskirt2" type="bone" />
+<tab index="79" name="phy_Bskirt2" type="bone" />
+<tab index="80" name="arm_no_move" type="bone" />
+<tab index="81" name="phy_arm" type="bone" />
+<tab index="82" name="no_move" type="bone" />
+<tab index="83" name="phy_Lribbon" type="bone" />
+<tab index="84" name="phy_Rribbon" type="bone" />
+<tab index="85" name="phy_Lear" type="bone" />
+<tab index="86" name="phy_Rear" type="bone" />
+<tab index="87" name="足ＩＫ_R" type="bone" />
+<tab index="88" name="足ＩＫ_L" type="bone" />
+<tab index="89" name="つま先ＩＫ_R" type="bone" />
+<tab index="90" name="つま先ＩＫ_L" type="bone" />
+</label>
+</labels>
+<materials><material b_name="f_b_body.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="0" name="f_b_body.mat" name_e="f_b_body.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="eye.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="1" name="eye.mat" name_e="eye.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="new_fb_natural.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="2" name="new_fb_natural.mat" name_e="new_fb_natural.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="new_eyelash.mat" both="1" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="3" name="new_eyelash.mat" name_e="new_eyelash.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="cheek.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="4" name="cheek.mat" name_e="cheek.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="hair_alphatest.mat" both="1" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="5" name="hair_alphatest.mat" name_e="hair_alphatest.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="hair_alpha.mat" both="1" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="6" name="hair_alpha.mat" name_e="hair_alpha.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="cloth.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="7" name="cloth.mat" name_e="cloth.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="cloth_jewelry.mat" both="0" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="8" name="cloth_jewelry.mat" name_e="cloth_jewelry.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+<material b_name="cloth_alpha.mat" both="1" drop_shadow="0" edge_size="1.0" ground_shadow="0" index="9" name="cloth_alpha.mat" name_e="cloth_alpha.mat" on_edge="0" on_shadow="0" toon="0" use_systemtoon="1"><edge_color a="0.0" b="0.0" g="0.0" r="0.0" /></material>
+</materials>
+<rigid_bodies>
+<rigid attach="上半身" friction="0.000" group="1" groups="0" index="0" mass="0.000" name="Spine1_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="0"><size a="0.910" b="0.650" c="0.650" /><pos x="0.000" y="15.303" z="-0.338" /><rot x="0.000" y="90.000" z="-87.146" /></rigid>
+<rigid attach="下半身" friction="0.000" group="1" groups="3" index="1" mass="0.000" name="waist_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="1.204" b="0.650" c="0.650" /><pos x="0.000" y="13.903" z="-0.075" /><rot x="0.000" y="90.000" z="101.889" /></rigid>
+<rigid attach="Spine2" friction="0.000" group="1" groups="3" index="2" mass="0.000" name="Spine2_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="1.127" b="0.650" c="0.650" /><pos x="0.000" y="16.597" z="-0.379" /><rot x="0.000" y="90.000" z="-92.811" /></rigid>
+<rigid attach="足_R" friction="0.000" group="1" groups="3" index="3" mass="0.000" name="RThigh_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="3.120" b="0.650" c="0.650" /><pos x="-1.066" y="10.268" z="-0.066" /><rot x="1.389" y="-180.000" z="90.000" /></rigid>
+<rigid attach="足_L" friction="0.000" group="1" groups="3" index="4" mass="0.000" name="LThigh_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="3.120" b="0.650" c="0.650" /><pos x="1.066" y="10.268" z="-0.066" /><rot x="1.389" y="-180.000" z="90.000" /></rigid>
+<rigid attach="ひざ_R" friction="0.000" group="1" groups="3" index="5" mass="0.000" name="RShin_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="3.120" b="0.650" c="0.650" /><pos x="-1.066" y="5.006" z="-0.002" /><rot x="-2.851" y="-180.000" z="90.000" /></rigid>
+<rigid attach="ひざ_L" friction="0.000" group="1" groups="3" index="6" mass="0.000" name="LShin_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="3.120" b="0.650" c="0.650" /><pos x="1.066" y="5.006" z="-0.002" /><rot x="-2.851" y="-180.000" z="90.000" /></rigid>
+<rigid attach="肩_R" friction="0.000" group="1" groups="3" index="7" mass="0.000" name="RShoulder_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="1.170" b="0.650" c="0.650" /><pos x="-0.659" y="17.809" z="0.226" /><rot x="-89.980" y="179.991" z="0.010" /></rigid>
+<rigid attach="肩_L" friction="0.000" group="1" groups="3" index="8" mass="0.000" name="LShoulder_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="1.170" b="0.650" c="0.650" /><pos x="0.709" y="17.783" z="0.261" /><rot x="-89.980" y="179.991" z="179.990" /></rigid>
+<rigid attach="首" friction="0.000" group="1" groups="0" index="9" mass="0.000" name="neck1_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="0"><size a="0.650" b="0.650" c="0.650" /><pos x="0.000" y="19.741" z="0.262" /><rot x="0.000" y="-90.000" z="-90.020" /></rigid>
+<rigid attach="腕_R" friction="0.000" group="1" groups="3" index="10" mass="0.000" name="RBicep_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="1.950" b="0.413" c="0.375" /><pos x="-3.092" y="18.520" z="0.420" /><rot x="-89.980" y="179.991" z="1.221" /></rigid>
+<rigid attach="頭" friction="0.000" group="1" groups="3" index="11" mass="0.000" name="head1_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="0.927" b="0.650" c="0.650" /><pos x="0.000" y="20.803" z="0.052" /><rot x="0.000" y="-90.000" z="-90.020" /></rigid>
+<rigid attach="腕_L" friction="0.000" group="1" groups="3" index="12" mass="0.000" name="LBicep_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="1.950" b="0.413" c="0.375" /><pos x="3.092" y="18.520" z="0.420" /><rot x="-89.980" y="179.991" z="178.779" /></rigid>
+<rigid attach="ひじ_L" friction="0.000" group="1" groups="3" index="13" mass="0.000" name="LForearm_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="0.843" b="0.386" c="0.367" /><pos x="5.611" y="18.520" z="0.381" /><rot x="-89.980" y="179.991" z="-177.351" /></rigid>
+<rigid attach="ひじ_R" friction="0.000" group="1" groups="3" index="14" mass="0.000" name="RForearm_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="1" type="0"><size a="0.843" b="0.386" c="0.367" /><pos x="-5.615" y="18.520" z="0.466" /><rot x="-89.980" y="179.991" z="-2.649" /></rigid>
+<rigid attach="no_move" friction="0.000" group="1" groups="0" index="15" mass="0.000" name="no_move_RB" name_e="D" pos_dump="0.000" restitution="0.000" rot_dump="0.000" shape="0" type="0"><size a="0.669" b="0.669" c="0.669" /><pos x="0.000" y="20.080" z="0.301" /><rot x="-0.021" y="-0.000" z="-89.980" /></rigid>
+<rigid attach="phy_R_side" friction="0.000" group="1" groups="1" index="16" mass="0.007" name="phy_R_side_RB" name_e="D" pos_dump="0.100" restitution="0.000" rot_dump="0.100" shape="0" type="1"><size a="0.402" b="0.402" c="0.402" /><pos x="-0.844" y="19.483" z="-0.377" /><rot x="1.945" y="0.079" z="87.791" /></rigid>
+<rigid attach="phy_L_side" friction="0.000" group="1" groups="1" index="17" mass="0.007" name="phy_L_side_RB" name_e="D" pos_dump="0.100" restitution="0.000" rot_dump="0.100" shape="0" type="1"><size a="0.402" b="0.402" c="0.402" /><pos x="1.162" y="19.471" z="-0.377" /><rot x="1.945" y="-0.079" z="92.209" /></rigid>
+<rigid attach="phy_R_hair" friction="0.000" group="2" groups="1" index="18" mass="0.010" name="phy_R_hair_RB" name_e="D" pos_dump="0.900" restitution="0.000" rot_dump="0.900" shape="2" type="1"><size a="0.401" b="1.471" c="0.669" /><pos x="-0.439" y="20.131" z="1.489" /><rot x="13.032" y="-8.490" z="2.019" /></rigid>
+<rigid attach="phy_L_hair" friction="0.000" group="2" groups="1" index="19" mass="0.010" name="phy_L_hair_RB" name_e="D" pos_dump="0.900" restitution="0.000" rot_dump="0.900" shape="2" type="1"><size a="0.401" b="1.471" c="0.669" /><pos x="0.439" y="20.131" z="1.489" /><rot x="13.032" y="8.490" z="177.981" /></rigid>
+<rigid attach="phy_R_hair2" friction="0.000" group="2" groups="1" index="20" mass="0.007" name="phy_R_hair2_RB" name_e="D" pos_dump="0.900" restitution="0.000" rot_dump="0.900" shape="2" type="1"><size a="0.401" b="1.472" c="0.669" /><pos x="-0.354" y="17.578" z="1.803" /><rot x="7.571" y="-0.235" z="1.778" /></rigid>
+<rigid attach="phy_L_hair2" friction="0.000" group="2" groups="1" index="21" mass="0.007" name="phy_L_hair2_RB" name_e="D" pos_dump="0.900" restitution="0.000" rot_dump="0.900" shape="2" type="1"><size a="0.401" b="1.472" c="0.669" /><pos x="0.354" y="17.578" z="1.803" /><rot x="7.571" y="0.235" z="-1.778" /></rigid>
+<rigid attach="phy_R_hair3" friction="0.000" group="2" groups="0" index="22" mass="0.010" name="phy_R_hair3_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.402" b="0.268" c="0.402" /><pos x="-0.433" y="14.660" z="1.524" /><rot x="-2.983" y="2.140" z="91.226" /></rigid>
+<rigid attach="phy_L_hair3" friction="0.000" group="2" groups="0" index="23" mass="0.010" name="phy_L_hair3_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.402" b="0.402" c="0.402" /><pos x="0.433" y="14.660" z="1.524" /><rot x="-3.089" y="1.984" z="89.074" /></rigid>
+<rigid attach="phy_body" friction="0.000" group="1" groups="0" index="24" mass="0.010" name="phy_body_RB" name_e="D" pos_dump="0.990" restitution="0.000" rot_dump="0.990" shape="0" type="1"><size a="0.260" b="0.520" c="0.650" /><pos x="0.000" y="18.496" z="-0.914" /><rot x="-26.894" y="-0.000" z="90.000" /></rigid>
+<rigid attach="arm_no_move" friction="0.000" group="1" groups="0" index="25" mass="0.000" name="arm_no_move_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="0"><size a="0.650" b="0.650" c="0.650" /><pos x="-8.854" y="18.757" z="0.205" /><rot x="-83.445" y="-90.180" z="-90.144" /></rigid>
+<rigid attach="phy_arm" friction="0.000" group="1" groups="1" index="26" mass="0.010" name="phy_arm_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.260" b="0.650" c="0.650" /><pos x="-7.967" y="18.935" z="0.452" /><rot x="-89.980" y="-171.912" z="-171.446" /></rigid>
+<rigid attach="phy_Bskirt1" friction="0.000" group="1" groups="1" index="27" mass="0.010" name="phy_Bskirt1_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="1" type="1"><size a="1.300" b="2.210" c="0.390" /><pos x="0.000" y="10.995" z="4.344" /><rot x="-33.698" y="-180.000" z="90.000" /></rigid>
+<rigid attach="phy_Rskirt1" friction="0.000" group="1" groups="1" index="28" mass="0.010" name="phy_Rskirt1_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.650" b="0.650" c="0.650" /><pos x="-4.288" y="11.008" z="0.281" /><rot x="0.003" y="-0.001" z="130.176" /></rigid>
+<rigid attach="phy_Lskirt1" friction="0.000" group="1" groups="1" index="29" mass="0.010" name="phy_Lskirt1_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.650" b="0.650" c="0.650" /><pos x="4.288" y="11.008" z="0.281" /><rot x="0.003" y="0.001" z="49.824" /></rigid>
+<rigid attach="phy_Fskirt" friction="0.000" group="1" groups="1" index="30" mass="0.010" name="phy_Fskirt_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="2" type="1"><size a="0.650" b="3.040" c="0.650" /><pos x="0.000" y="10.707" z="-3.801" /><rot x="-40.403" y="-0.000" z="89.980" /></rigid>
+<rigid attach="phy_Lskirt2" friction="0.000" group="1" groups="1" index="31" mass="0.010" name="phy_Lskirt2_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.650" b="0.650" c="0.650" /><pos x="6.032" y="6.485" z="0.281" /><rot x="0.003" y="0.001" z="80.381" /></rigid>
+<rigid attach="phy_Rskirt2" friction="0.000" group="1" groups="1" index="32" mass="0.010" name="phy_Rskirt2_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.650" b="0.650" c="0.650" /><pos x="-6.032" y="6.485" z="0.281" /><rot x="0.003" y="-0.001" z="99.619" /></rigid>
+<rigid attach="phy_Bskirt2" friction="0.000" group="1" groups="1" index="33" mass="0.010" name="phy_Bskirt2_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="1" type="1"><size a="1.300" b="3.640" c="0.390" /><pos x="0.000" y="6.200" z="8.401" /><rot x="32.986" y="-0.000" z="89.980" /></rigid>
+<rigid attach="no_move" friction="0.000" group="1" groups="0" index="34" mass="0.000" name="no_move_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="0"><size a="0.669" b="0.669" c="0.669" /><pos x="0.000" y="20.080" z="0.301" /><rot x="-0.021" y="-0.000" z="-89.980" /></rigid>
+<rigid attach="phy_Lribbon" friction="0.000" group="1" groups="0" index="35" mass="0.010" name="phy_Lribbon_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.399" b="0.666" c="0.666" /><pos x="1.552" y="19.252" z="-1.321" /><rot x="-11.515" y="-95.828" z="62.950" /></rigid>
+<rigid attach="phy_Rribbon" friction="0.000" group="1" groups="0" index="36" mass="0.010" name="phy_Rribbon_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.399" b="0.532" c="0.532" /><pos x="1.497" y="19.318" z="1.247" /><rot x="2.842" y="91.560" z="61.260" /></rigid>
+<rigid attach="phy_Lear" friction="0.000" group="1" groups="0" index="37" mass="0.010" name="phy_Lear_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.134" b="0.536" c="0.669" /><pos x="0.870" y="19.440" z="-0.078" /><rot x="-0.021" y="-0.000" z="90.020" /></rigid>
+<rigid attach="phy_Rear" friction="0.000" group="1" groups="0" index="38" mass="0.010" name="phy_Rear_RB" name_e="D" pos_dump="1.000" restitution="0.000" rot_dump="1.000" shape="0" type="1"><size a="0.134" b="0.402" c="0.669" /><pos x="-0.870" y="19.440" z="-0.078" /><rot x="-0.021" y="-0.000" z="90.020" /></rigid>
+</rigid_bodies>
+<constraints>
+<constraint body_A="15" body_B="16" index="0" name="D" name_e="D"><pos x="-0.844" y="19.483" z="-0.377" /><rot x="0.079" y="1.945" z="87.791" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-5.000" y="-30.000" z="-50.000" /><to x="5.000" y="30.000" z="50.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.990" y="0.990" z="0.990" /></constraint>
+<constraint body_A="15" body_B="17" index="1" name="D" name_e="D"><pos x="1.162" y="19.471" z="-0.377" /><rot x="-0.079" y="1.945" z="92.209" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-5.000" y="-30.000" z="-50.000" /><to x="5.000" y="30.000" z="50.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.990" y="0.990" z="0.990" /></constraint>
+<constraint body_A="15" body_B="18" index="2" name="D" name_e="D"><pos x="-0.439" y="20.131" z="1.489" /><rot x="-8.490" y="13.032" z="2.019" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-5.000" y="0.000" z="-30.000" /><to x="10.000" y="40.000" z="5.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.500" y="0.500" z="0.500" /></constraint>
+<constraint body_A="15" body_B="19" index="3" name="D" name_e="D"><pos x="0.439" y="20.131" z="1.489" /><rot x="8.490" y="13.032" z="177.981" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-1.000" y="0.000" z="-20.000" /><to x="1.000" y="40.000" z="20.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.000" y="0.000" z="0.000" /></constraint>
+<constraint body_A="18" body_B="20" index="4" name="D" name_e="D"><pos x="-0.354" y="17.578" z="1.803" /><rot x="-0.235" y="7.571" z="1.778" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-5.000" y="-10.000" z="-30.000" /><to x="5.000" y="10.000" z="10.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.500" y="0.500" z="0.500" /></constraint>
+<constraint body_A="19" body_B="21" index="5" name="D" name_e="D"><pos x="0.354" y="17.578" z="1.803" /><rot x="0.235" y="7.571" z="-1.778" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="0.000" y="-10.000" z="5.000" /><to x="0.000" y="10.000" z="15.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.500" y="0.500" z="0.500" /></constraint>
+<constraint body_A="20" body_B="22" index="6" name="D" name_e="D"><pos x="-0.433" y="14.660" z="1.524" /><rot x="2.140" y="-2.983" z="91.226" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-30.000" y="-30.000" z="-30.000" /><to x="30.000" y="30.000" z="30.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.500" y="0.500" z="0.500" /></constraint>
+<constraint body_A="21" body_B="23" index="7" name="D" name_e="D"><pos x="0.433" y="14.660" z="1.524" /><rot x="1.984" y="-3.089" z="89.074" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-30.000" y="-30.000" z="0.000" /><to x="30.000" y="30.000" z="5.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.500" y="0.500" z="0.500" /></constraint>
+<constraint body_A="2" body_B="24" index="8" name="D" name_e="D"><pos x="0.000" y="18.496" z="-0.914" /><rot x="-0.000" y="-26.894" z="90.000" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-60.000" z="-60.000" /><to x="10.000" y="5.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.000" y="0.000" z="0.000" /></constraint>
+<constraint body_A="25" body_B="26" index="9" name="D" name_e="D"><pos x="-7.967" y="18.935" z="0.452" /><rot x="-171.912" y="-89.980" z="-171.446" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-90.000" y="-90.000" z="-90.000" /><to x="90.000" y="10.000" z="90.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.000" y="0.000" z="0.000" /></constraint>
+<constraint body_A="1" body_B="27" index="10" name="D" name_e="D"><pos x="0.000" y="10.995" z="4.344" /><rot x="-180.000" y="-33.698" z="90.000" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-30.000" z="-60.000" /><to x="10.000" y="60.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="1" body_B="28" index="11" name="D" name_e="D"><pos x="-4.288" y="11.008" z="0.281" /><rot x="-0.001" y="0.003" z="130.176" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-60.000" z="-30.000" /><to x="10.000" y="60.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="1" body_B="29" index="12" name="D" name_e="D"><pos x="4.288" y="11.008" z="0.281" /><rot x="0.001" y="0.003" z="49.824" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-60.000" z="-60.000" /><to x="10.000" y="60.000" z="30.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="1" body_B="30" index="13" name="D" name_e="D"><pos x="0.000" y="10.707" z="-3.801" /><rot x="-0.000" y="-40.403" z="89.980" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-90.000" z="-60.000" /><to x="10.000" y="30.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="29" body_B="31" index="14" name="D" name_e="D"><pos x="6.032" y="6.485" z="0.281" /><rot x="0.001" y="0.003" z="80.381" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-60.000" z="-60.000" /><to x="10.000" y="60.000" z="30.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="28" body_B="32" index="15" name="D" name_e="D"><pos x="-6.032" y="6.485" z="0.281" /><rot x="-0.001" y="0.003" z="99.619" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-60.000" z="-30.000" /><to x="10.000" y="60.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="27" body_B="33" index="16" name="D" name_e="D"><pos x="0.000" y="6.200" z="8.401" /><rot x="-0.000" y="32.986" z="89.980" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-30.000" z="-60.000" /><to x="10.000" y="60.000" z="60.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="2.500" y="2.500" z="2.500" /></constraint>
+<constraint body_A="34" body_B="35" index="17" name="D" name_e="D"><pos x="1.552" y="19.252" z="-1.321" /><rot x="-95.828" y="-11.515" z="62.950" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-30.000" z="-30.000" /><to x="10.000" y="60.000" z="30.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="1.500" y="1.500" z="1.500" /></constraint>
+<constraint body_A="34" body_B="36" index="18" name="D" name_e="D"><pos x="1.497" y="19.318" z="1.247" /><rot x="91.560" y="2.842" z="61.260" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-30.000" z="-30.000" /><to x="10.000" y="60.000" z="30.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="1.500" y="1.500" z="1.500" /></constraint>
+<constraint body_A="34" body_B="37" index="19" name="D" name_e="D"><pos x="0.870" y="19.440" z="-0.078" /><rot x="-0.000" y="-0.021" z="90.020" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-90.000" z="-60.000" /><to x="10.000" y="90.000" z="20.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.000" y="0.000" z="0.000" /></constraint>
+<constraint body_A="34" body_B="38" index="20" name="D" name_e="D"><pos x="-0.870" y="19.440" z="-0.078" /><rot x="-0.000" y="-0.021" z="90.020" /><pos_limit><from x="0.000" y="0.000" z="0.000" /><to x="0.000" y="0.000" z="0.000" /></pos_limit><rot_limit><from x="-10.000" y="-90.000" z="-60.000" /><to x="10.000" y="90.000" z="20.000" /></rot_limit><pos_spring x="0.000" y="0.000" z="0.000" /><rot_spring x="0.000" y="0.000" z="0.000" /></constraint>
+</constraints>
+</ns0:pmxstatus>
