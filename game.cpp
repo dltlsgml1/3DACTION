@@ -25,6 +25,7 @@ HANDLE				g_hEventHandle;		// イベントハンドル
 bool				g_EndFlag = false;	// 終了フラグ
 std::thread			g_gamemainthread;	// ゲームメインスレッド
 
+CShader				*g_pShader = nullptr;
 
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
@@ -104,9 +105,13 @@ LPDIRECT3DTEXTURE9			g_normaltexture;
 bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 {
 	bool sts;
+
 	g_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 	g_pPlayer = new CDirect3DXFile();
 	g_land = new CDirect3DXFile();
+
+
+	g_pShader = new CShader(g_DXGrobj->GetDXDevice(), "basic.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
 
 	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
 

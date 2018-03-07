@@ -11,16 +11,26 @@ private:
 	LPD3DXCONSTANTTABLE			m_pPSConstantTable;
 	LPD3DXBUFFER				m_Buffer;
 	const char*					m_Filename;
-	const char*					m_EntryFunction;
-	const char*					m_ShaderModel;
-public:
-	CShader(LPDIRECT3DDEVICE9 device, const char* filename, const char* entrypoint,const char* shadermodel);
-	~CShader();
-	bool InitShader();
-	bool ShaderCompile();
-    bool CreatePixelShader();
-	bool CreateVertexShader();
+	const char*					m_VSEntryPoint;
+	const char*					m_PSEntryPoint;
+	const char*					m_VSShaderModel;
+	const char*					m_PSShaderModel;
 	
+public:
+	CShader(LPDIRECT3DDEVICE9 device, 
+		const char* filename, 
+		const char* VSShaderModel,
+		const char* VSEntryPoint,
+		const char* PSShaderModel,
+		const char* PSEntryPoint);
+	~CShader();
+	bool						InitShader();
+	bool						CreatePixelShader();
+	bool						CreateVertexShader();
+	LPDIRECT3DVERTEXSHADER9		GetVertexShader();
+	LPD3DXCONSTANTTABLE			GetVSTable();
+	LPDIRECT3DPIXELSHADER9		GetPixelShader();
+	LPD3DXCONSTANTTABLE			GetPSTable();
 	
 
 };

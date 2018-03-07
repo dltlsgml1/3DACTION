@@ -1,10 +1,17 @@
 #include "shader.h"
-CShader::CShader(LPDIRECT3DDEVICE9 device, const char* filename, const char* entrypoint, const char* shadermodel)
+CShader::CShader(LPDIRECT3DDEVICE9 device,
+	const char* filename,
+	const char* VSShaderModel,
+	const char* VSEntryPoint,
+	const char* PSShaderModel,
+	const char* PSEntryPoint)
 {
 	m_pDXDevice = device;
 	m_Filename = filename;
-	m_EntryFunction = entrypoint;
-	m_ShaderModel = shadermodel;
+	m_VSEntryPoint = VSEntryPoint;
+	m_VSShaderModel = VSShaderModel;
+	m_PSEntryPoint = PSEntryPoint;
+	m_PSShaderModel = PSShaderModel;
 }
 
 CShader::~CShader()
@@ -21,7 +28,13 @@ bool CShader::InitShader()
 	sts = CreatePixelShader();
 	if (sts == false)
 	{
-		MessageBox(NULL, "ERROR", "ERROR IN CreatePixelShader", MB_OK);
+		MessageBox(NULL, "ERROR", "ERROR IN PS_CreatePixelShader", MB_OK);
+		return false;
+	}
+	sts = CreateVertexShader();
+	if (sts == false)
+	{
+		MessageBox(NULL, "ERROR", "ERROR IN PS_CreateVertexShader", MB_OK);
 		return false;
 	}
 	return true;
@@ -37,8 +50,8 @@ bool CShader::CreatePixelShader()
 		m_Filename,
 		nullptr,
 		nullptr,
-		m_EntryFunction,
-		m_ShaderModel,
+		m_PSEntryPoint,
+		m_PSShaderModel,
 		0,
 		&m_Buffer,
 		&err,
@@ -51,7 +64,7 @@ bool CShader::CreatePixelShader()
 		}
 		else
 		{
-			MessageBox(NULL,"ERROR", "ERROR IN D3DXCompileShaderFromFile", MB_OK);
+			MessageBox(NULL,"ERROR", "ERROR IN PS_D3DXCompileShaderFromFile", MB_OK);
 		}
 		return false;
 	}
@@ -66,8 +79,83 @@ bool CShader::CreatePixelShader()
 }
 bool CShader::CreateVertexShader()
 {
-
+	LPD3DXBUFFER err = nullptr;
+	HRESULT hr;
+	hr = D3DXCompileShaderFromFile(
+		m_Filename,
+		nullptr,
+		nullptr,
+		m_PSEntryPoint,
+		m_PSShaderModel,
+		0,
+		&m_Buffer,
+		&err,
+		&m_pVSConstantTable);
+	if (FAILED(hr))
+	{
+		if (err)
+		{
+			MessageBox(NULL, (LPSTR)err->GetBufferPointer(), "ERROR IN VS_D3DXCompileShaderFromFile", MB_OK);
+		}
+		else
+		{
+			MessageBox(NULL, "ERROR", "ERROR IN VS_D3DXCompileShaderFromFile", MB_OK);
+		}
+		return false;
+	}
+	hr = m_pDXDevice->CreateVertexShader((DWORD*)m_Buffer->GetBufferPointer(), &m_pVertexShader);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "ERROR", "ERROR IN CreateVertexShader", MB_OK);
+		return false;
+	}
+	return true;
 }
+
+LPDIRECT3DVERTEXSHADER9 CShader::GetVertexShader()
+{
+	return m_pVertexShader;
+}
+
+LPD3DXCONSTANTTABLE	CShader::GetVSTable()
+{
+	return m_pVSConstantTable;
+}
+
+LPDIRECT3DPIXELSHADER9 CShader::GetPixelShader()
+{
+	return m_pPixelShader;
+}
+
+LPD3DXCONSTANTTABLE	CShader::GetPSTable()
+{
+	return m_pPSConstantTable;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool ShaderCompile(const char* filename,
 	const char* entry,
