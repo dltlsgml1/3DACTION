@@ -20,6 +20,8 @@ CShader::~CShader()
 	m_pPixelShader->Release();
 	m_pVSConstantTable->Release();
 	m_pPSConstantTable->Release();
+	m_pDXDevice->Release();
+	m_Buffer->Release();
 }
 
 bool CShader::InitShader()
@@ -28,13 +30,13 @@ bool CShader::InitShader()
 	sts = CreatePixelShader();
 	if (sts == false)
 	{
-		MessageBox(NULL, "ERROR", "ERROR IN PS_CreatePixelShader", MB_OK);
+		MessageBox(NULL, "ERROR IN InitShader_PS_CreatePixelShader","ERROR" , MB_OK);
 		return false;
 	}
 	sts = CreateVertexShader();
 	if (sts == false)
 	{
-		MessageBox(NULL, "ERROR", "ERROR IN PS_CreateVertexShader", MB_OK);
+		MessageBox(NULL,  "ERROR IN InitShader_VS_CreateVertexShader", "ERROR", MB_OK);
 		return false;
 	}
 	return true;
@@ -60,11 +62,11 @@ bool CShader::CreatePixelShader()
 	{
 		if (err)
 		{
-			MessageBox(NULL, (LPSTR)err->GetBufferPointer(), "ERROR IN D3DXCompileShaderFromFile", MB_OK);
+			MessageBox(NULL, "ERROR IN D3DXCompileShaderFromFile", (LPSTR)err->GetBufferPointer(), MB_OK);
 		}
 		else
 		{
-			MessageBox(NULL,"ERROR", "ERROR IN PS_D3DXCompileShaderFromFile", MB_OK);
+			MessageBox(NULL, "ERROR IN PS_D3DXCompileShaderFromFile","ERROR", MB_OK);
 		}
 		return false;
 	}
@@ -72,7 +74,7 @@ bool CShader::CreatePixelShader()
 	hr = m_pDXDevice->CreatePixelShader((DWORD*)m_Buffer->GetBufferPointer(), &m_pPixelShader);
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, "ERROR", "ERROR IN CreatePixelShader", MB_OK);
+		MessageBox(NULL, "ERROR IN CreatePixelShader","ERROR", MB_OK);
 		return false;
 	}
 	return true;
@@ -85,8 +87,8 @@ bool CShader::CreateVertexShader()
 		m_Filename,
 		nullptr,
 		nullptr,
-		m_PSEntryPoint,
-		m_PSShaderModel,
+		m_VSEntryPoint,
+		m_VSShaderModel,
 		0,
 		&m_Buffer,
 		&err,
@@ -95,18 +97,18 @@ bool CShader::CreateVertexShader()
 	{
 		if (err)
 		{
-			MessageBox(NULL, (LPSTR)err->GetBufferPointer(), "ERROR IN VS_D3DXCompileShaderFromFile", MB_OK);
+			MessageBox(NULL, "ERROR IN VS_D3DXCompileShaderFromFile", (LPSTR)err->GetBufferPointer(), MB_OK);
 		}
 		else
 		{
-			MessageBox(NULL, "ERROR", "ERROR IN VS_D3DXCompileShaderFromFile", MB_OK);
+			MessageBox(NULL, "ERROR IN VS_D3DXCompileShaderFromFile", "ERROR", MB_OK);
 		}
 		return false;
 	}
 	hr = m_pDXDevice->CreateVertexShader((DWORD*)m_Buffer->GetBufferPointer(), &m_pVertexShader);
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, "ERROR", "ERROR IN CreateVertexShader", MB_OK);
+		MessageBox(NULL, "ERROR IN CreateVertexShader","ERROR" , MB_OK);
 		return false;
 	}
 	return true;

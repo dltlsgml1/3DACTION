@@ -25,7 +25,10 @@ HANDLE				g_hEventHandle;		// イベントハンドル
 bool				g_EndFlag = false;	// 終了フラグ
 std::thread			g_gamemainthread;	// ゲームメインスレッド
 
-CShader				*g_pShader = nullptr;
+CShader				*g_pPlayerShader = nullptr;
+CShader				*g_pLandShader = nullptr;
+CShader				*g_pShadowShader = nullptr;
+
 
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
@@ -111,10 +114,17 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_land = new CDirect3DXFile();
 
 
-	g_pShader = new CShader(g_DXGrobj->GetDXDevice(), "basic.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
 
 	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
 
+	g_pPlayerShader = new CShader(g_DXGrobj->GetDXDevice(), "basic.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
+	g_pLandShader = new CShader(g_DXGrobj->GetDXDevice(), "LandShader.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
+	g_pShadowShader = new CShader(g_DXGrobj->GetDXDevice(), "shadow.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
+
+	g_pPlayerShader->InitShader();
+	g_pLandShader->InitShader();
+	g_pShadowShader->InitShader();
+	
 	if (!sts){
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
@@ -173,6 +183,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	InitShader(g_DXGrobj->GetDXDevice(), "shadow.hlsl", &g_pShadowVS,&g_pVSTableShadow, &g_pShadowPS,&g_pPSTableShadow);
 
 	
+	
 	// イベントハンドル生成
 	g_hEventHandle = CreateEvent(NULL, false, false, NULL);
 	if (g_hEventHandle == NULL){
@@ -193,6 +204,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
+
+
 	return	true;
 }
 
@@ -317,6 +330,7 @@ void GameRender(){
 	if (hr != D3D_OK){
 		g_DXGrobj->GetDXDevice()->Reset(&g_DXGrobj->GetDXD3dpp());
 	}
+
 }
 
 //==============================================================================
@@ -369,6 +383,14 @@ void GameExit()
 	UninitInput();
 	ExitShader(&g_pPlayerVS,&g_pVSTablePlayer,&g_pPlayerPS,&g_pPSTablePlayer);
 	ExitShader(&g_pLandVS, &g_pVSTableLand, &g_pLandPS, &g_pPSTableLand);
+
+	delete g_pPlayerShader;
+	g_pPlayerShader = nullptr;
+	delete g_pLandShader;
+	g_pLandShader = nullptr;
+	delete g_pShadowShader;
+	g_pShadowShader = nullptr;
+	
 }
 
 //==============================================================================
@@ -454,48 +476,48 @@ void DrawPlayer()
 {
 	LPDIRECT3DDEVICE9 lpdevice = g_DXGrobj->GetDXDevice();
 	D3DXVECTOR4 tempVec;
-	lpdevice->SetVertexShader(g_pPlayerVS);
-	lpdevice->SetPixelShader(g_pPlayerPS);
+	lpdevice->SetVertexShader(g_pPlayerShader->GetVertexShader());
+	lpdevice->SetPixelShader(g_pPlayerShader->GetPixelShader());
 
 	
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_view", &g_MatView);
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_MatView);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
 
 	tempVec.x = g_camera.x;
 	tempVec.y = g_camera.y;
 	tempVec.z = g_camera.z;
 	tempVec.w = 0;
-	g_pVSTablePlayer->SetVector(lpdevice, "g_camera_pos", &tempVec);
-	g_pPSTablePlayer->SetVector(lpdevice, "g_camera_pos", &tempVec);
+	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
+	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
 	tempVec.x = g_light_dir.x;
 	tempVec.y = g_light_dir.y;
 	tempVec.z = g_light_dir.z;
 	tempVec.w = 1;
-	g_pVSTablePlayer->SetVector(lpdevice, "g_light_dir", &tempVec);
-	g_pPSTablePlayer->SetVector(lpdevice, "g_light_dir", &tempVec);
-	g_pVSTablePlayer->SetBool(lpdevice, "drawguideline", false);
-	g_pPSTablePlayer->SetBool(lpdevice, "drawguideline", false);
+	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pPlayerShader->GetVSTable()->SetBool(lpdevice, "drawguideline", false);
+	g_pPlayerShader->GetPSTable()->SetBool(lpdevice, "drawguideline", false);
 
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
-	g_pVSTablePlayer->SetMatrix(lpdevice, "g_matuv", &g_matuv);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
 
 	
-	int toonindex = g_pPSTablePlayer->GetSamplerIndex("ToonSampler1");
+	int toonindex = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ToonSampler1");
 	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	lpdevice->SetTexture(toonindex, g_toontexture);
-	int index = g_pPSTablePlayer->GetSamplerIndex("ShadowSampler");
+	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex2);
-	g_pPlayer->Draw(lpdevice, g_pVSTablePlayer, g_pPSTablePlayer);
+	g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
 
 void DrawLand()
 {
 	LPDIRECT3DDEVICE9 lpdevice = g_DXGrobj->GetDXDevice();
 	D3DXVECTOR4 tempVec;
-	lpdevice->SetVertexShader(g_pLandVS);
+	lpdevice->SetVertexShader(g_pLandShader->GetVertexShader());
 	lpdevice->SetPixelShader(g_pLandPS);
 
 	int normalindex = g_pPSTableLand->GetSamplerIndex("NormalSampler");
