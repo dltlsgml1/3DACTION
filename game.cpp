@@ -36,8 +36,6 @@ CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
 CDirect3DXFile		*g_pPlayer = nullptr;
 
-D3DXMATRIX			g_MatView;			// カメラ行列
-D3DXMATRIX			g_MatProjection;	// プロジェクション変換行列
 D3DXMATRIX			g_MatPlayer;			// ワールド変換行列
 D3DXMATRIX			g_MatLand;			//地形の行列
 D3DXMATRIX			g_Scale;			//２倍にする行列
@@ -144,26 +142,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	}
 
 	// カメラ変換行列作成
-	D3DXVECTOR3 cp = D3DXVECTOR3(0.0f, 5.0f, -5.0f);
-	D3DXVECTOR3 fo = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	g_pCamera->SetCameraView(g_DXGrobj->GetDXDevice(),cp, fo);
-	//D3DXMatrixLookAtLH(&g_MatView,
-	//	&D3DXVECTOR3(g_camera.x,g_camera.y,g_camera.z),		// 視点
-	//	&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
-	//	&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
-
-	//// カメラ行列を固定パイプラインへセット
-	//g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
-
-	//// プロジェクション変換行列作成
-	//D3DXMatrixPerspectiveFovLH(&g_MatProjection,
-	//	D3DX_PI / 2,					// 視野角
-	//	(float)width / (float)height,	// アスペクト比
-	//	0.1f,						// ニアプレーン
-	//	1000.0f);					// ファープレーン
-
-	//// 射影変換行列を固定パイプラインへセット
-	//g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
+	
+	
 	// Ｚバッファ有効
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
 
@@ -257,7 +237,16 @@ void GameInput(){
 //!	@retval	なし
 //==============================================================================
 void GameUpdate(){
+
+	D3DXVECTOR4 camerapos = D3DXVECTOR4(g_pCamera->GetCameraPos().x,
+										g_pCamera->GetCameraPos().y,
+										g_pCamera->GetCameraPos().z,
+										0.0f);
+
 	static int angle = 0;
+
+	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 5.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	g_pCamera->SetCameraMat(g_DXGrobj->GetDXDevice());
 
 	UpdateInput();
 	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
@@ -279,9 +268,9 @@ void GameUpdate(){
 	D3DXMatrixInverse(&g_InvMatLand, nullptr, &g_MatLand);
 
 	D3DXVECTOR4 pos(g_MatLand._41, g_MatLand._42, g_MatLand._43, g_MatLand._44);
-
+	
 	D3DXVec4Transform(&inv_light_dir, &g_light_dir, &g_InvMatLand);
-	D3DXVec4Transform(&inv_camera_pos, &g_camera, &g_InvMatLand);
+	D3DXVec4Transform(&inv_camera_pos, &camerapos, &g_InvMatLand);
 	D3DXVec4Transform(&inv_pos, &pos, &g_InvMatLand);
 }
 
@@ -374,9 +363,11 @@ void GameExit()
 	delete g_pPlayerShader;
 	delete g_pLandShader;
 	delete g_pShadowShader;
+	delete g_pCamera;
 	g_pPlayerShader = nullptr;
 	g_pLandShader = nullptr;
 	g_pShadowShader = nullptr;
+	g_pCamera = nullptr;
 	
 }
 

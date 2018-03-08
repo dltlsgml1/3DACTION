@@ -20,8 +20,10 @@ private:
 public:
 	CCamera(float FOV, float Aspect, float Near, float Far);
 	~CCamera();
-	void SetCameraView(LPDIRECT3DDEVICE9 Device, D3DXVECTOR3 &CameraPos,D3DXVECTOR3 &Focus);
-	void SetCameraPos();
+	void SetCameraMat(LPDIRECT3DDEVICE9 Device);
+	void SetCameraProjection(float FOV, float Aspect, float Near, float Far);
+	void SetCameraView(D3DXVECTOR3 CameraPos, D3DXVECTOR3 Focus);
 	D3DXMATRIX GetViewMatrix();
 	D3DXMATRIX GetProjectionMatrix();
+	D3DXVECTOR3 GetCameraPos();
 };
