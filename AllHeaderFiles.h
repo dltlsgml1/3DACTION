@@ -7,3 +7,5 @@
 #include "input.h"
 #include "mathutil.h"
 #include "shader.h"
+#include "CGame.h"
+#include "CCamera.h"

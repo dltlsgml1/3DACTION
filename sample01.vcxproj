@@ -81,8 +81,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
+    <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
@@ -92,8 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllHeaderFiles.h" />
+    <ClInclude Include="CCamera.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
+    <ClInclude Include="CGame.h" />
     <ClInclude Include="ClassInstance.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="game.h" />

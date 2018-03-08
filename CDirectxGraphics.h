@@ -36,14 +36,13 @@ public:
 
 	bool	Init(HWND hwnd,bool fullscreenflag,int width,int height);	// 初期処理
 	void	Exit();														// 終了処理
-	LPDIRECT3DDEVICE9	GetDXDevice() const {							// デバイスオブジェクトＧＥＴ
+	LPDIRECT3DDEVICE9 GetDXDevice() {							// デバイスオブジェクトＧＥＴ
 		return m_lpd3ddevice;
 	}
 	D3DPRESENT_PARAMETERS GetDXD3dpp() const{							// プレゼンテーションパラメータＧＥＴ
 		return m_d3dpp;
 	}
 };
-
 //******************************************************************************
 //	End of file.
 //******************************************************************************

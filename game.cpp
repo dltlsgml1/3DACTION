@@ -75,7 +75,6 @@ D3DXVECTOR4		g_specular(1.0f, 1.0f, 1.0f, 0.2f);			// ƒXƒyƒLƒ…ƒ‰Œõ
 
 D3DXMATRIX			g_lightcameramat;
 D3DXMATRIX			g_lightprojectionmat;
-D3DXVECTOR4			g_camerapos;
 
 LPDIRECT3DTEXTURE9			g_toontexture;
 LPDIRECT3DTEXTURE9			g_normaltexture;
