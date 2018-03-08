@@ -1,0 +1,9 @@
+#pragma once
+#include "CDirect3DXFile.h"
+#include "CDirectxGraphics.h"
+#include "ClassInstance.h"
+#include "CPlayer.h"
+#include "game.h"
+#include "input.h"
+#include "mathutil.h"
+#include "shader.h"

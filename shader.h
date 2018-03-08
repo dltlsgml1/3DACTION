@@ -35,23 +35,6 @@ public:
 
 };
 
-bool ShaderCompile(const char* filename,
-					const char* entry,
-					const char* version,
-					LPD3DXBUFFER *code,
-					LPD3DXCONSTANTTABLE *ctbl);
-bool PixelShaderCompile(LPDIRECT3DDEVICE9 device,
-						const char* filename,
-						const char* entry,
-						const char* version,
-						LPD3DXCONSTANTTABLE *ctbl,
-						LPDIRECT3DPIXELSHADER9 *psh);
-bool VertexShaderCompile(LPDIRECT3DDEVICE9 device,
-						const char* filename,
-						const char* entry,
-						const char* version,
-						LPD3DXCONSTANTTABLE *ctbl,
-						LPDIRECT3DVERTEXSHADER9 *vsh);
 
 bool CreateRenderTarget(LPDIRECT3DDEVICE9 device,
 	int width,
@@ -74,13 +57,4 @@ void SetRenderTarget(
 	D3DVIEWPORT9&		vp);					// ビューポート
 
 
-bool InitShader(LPDIRECT3DDEVICE9 device,
-				const char* filename,
-				LPDIRECT3DVERTEXSHADER9 *vs,
-				LPD3DXCONSTANTTABLE *vstable,
-				LPDIRECT3DPIXELSHADER9 *ps,
-				LPD3DXCONSTANTTABLE *pstable);
-void ExitShader(LPDIRECT3DVERTEXSHADER9 *vs,
-				LPD3DXCONSTANTTABLE *vstable, 
-				LPDIRECT3DPIXELSHADER9 *ps, 
-				LPD3DXCONSTANTTABLE *pstable);
+

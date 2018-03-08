@@ -53,20 +53,6 @@ D3DXVECTOR4			inv_light_dir;
 D3DXVECTOR4			inv_camera_pos;
 D3DXVECTOR4			inv_pos;
 
-LPDIRECT3DVERTEXSHADER9 g_pPlayerVS = nullptr;
-LPDIRECT3DPIXELSHADER9  g_pPlayerPS = nullptr;
-LPDIRECT3DVERTEXSHADER9 g_pLandVS = nullptr;
-LPDIRECT3DPIXELSHADER9  g_pLandPS = nullptr;
-LPDIRECT3DVERTEXSHADER9 g_pShadowVS = nullptr;
-LPDIRECT3DPIXELSHADER9  g_pShadowPS = nullptr;
-
-LPD3DXCONSTANTTABLE		g_pVSTablePlayer = nullptr;
-LPD3DXCONSTANTTABLE		g_pVSTableLand = nullptr;
-LPD3DXCONSTANTTABLE		g_pVSTableShadow = nullptr;
-LPD3DXCONSTANTTABLE		g_pPSTablePlayer = nullptr;
-LPD3DXCONSTANTTABLE		g_pPSTableLand = nullptr;
-LPD3DXCONSTANTTABLE		g_pPSTableShadow = nullptr;
-
 
 LPDIRECT3DTEXTURE9		g_ShadowTex = nullptr;				// 投影シャドウテクスチャ
 LPDIRECT3DSURFACE9		g_ShadowSurface = nullptr;			// 投影シャドウテクスチャサーフェス	
@@ -75,8 +61,6 @@ LPDIRECT3DSURFACE9		g_ShadowZbufferSurface = nullptr;		// 投影テクスチャへレンダ
 LPDIRECT3DTEXTURE9		g_ShadowTex2 = nullptr;				// 投影シャドウテクスチャ
 LPDIRECT3DSURFACE9		g_ShadowSurface2 = nullptr;			// 投影シャドウテクスチャサーフェス	
 LPDIRECT3DSURFACE9		g_ShadowZbufferSurface2 = nullptr;		// 投影テクスチャへレンダリングする際のＺバッファ（深度バッファ）
-
-
 
 D3DXVECTOR3			g_angle = { 0.0f,0.0f,0.0f };
 D3DXVECTOR3			g_trans = { 0.0f,0.0f,0.0f };
@@ -178,9 +162,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	// ライト有効
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
 
-	InitShader(g_DXGrobj->GetDXDevice(),"basic.hlsl", &g_pPlayerVS, &g_pVSTablePlayer, &g_pPlayerPS, &g_pPSTablePlayer);
-	InitShader(g_DXGrobj->GetDXDevice(), "LandShader.hlsl", &g_pLandVS, &g_pVSTableLand, &g_pLandPS ,&g_pPSTableLand);
-	InitShader(g_DXGrobj->GetDXDevice(), "shadow.hlsl", &g_pShadowVS,&g_pVSTableShadow, &g_pShadowPS,&g_pPSTableShadow);
 
 	
 	
@@ -381,14 +362,11 @@ void GameExit()
 		g_DXGrobj = nullptr;
 	}
 	UninitInput();
-	ExitShader(&g_pPlayerVS,&g_pVSTablePlayer,&g_pPlayerPS,&g_pPSTablePlayer);
-	ExitShader(&g_pLandVS, &g_pVSTableLand, &g_pLandPS, &g_pPSTableLand);
-
 	delete g_pPlayerShader;
-	g_pPlayerShader = nullptr;
 	delete g_pLandShader;
-	g_pLandShader = nullptr;
 	delete g_pShadowShader;
+	g_pPlayerShader = nullptr;
+	g_pLandShader = nullptr;
 	g_pShadowShader = nullptr;
 	
 }
@@ -428,18 +406,18 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	D3DXMatrixPerspectiveFovLH(&g_lightprojectionmat, D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
 
 	// 頂点シェーダーとピクセルシェーダーをセット
-	lpdevice->SetVertexShader(g_pShadowVS);
-	lpdevice->SetPixelShader(g_pShadowPS);
+	lpdevice->SetVertexShader(g_pShadowShader->GetVertexShader());
+	lpdevice->SetPixelShader(g_pShadowShader->GetPixelShader());
 
 	// 定数をセット(頂点シェーダー)
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_view", &g_lightcameramat);
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_projection", &g_lightprojectionmat);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_lightcameramat);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_lightprojectionmat);
 
-	g_pPSTableShadow->SetVector(lpdevice, "g_diffuse", &g_diffuse);
-	g_pPSTableShadow->SetVector(lpdevice, "g_ambient", &g_ambient);
-	g_pPSTableShadow->SetVector(lpdevice, "g_specular", &g_specular);
-	g_pPSTableShadow->SetVector(lpdevice, "g_light_dir", &g_light_dir);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_diffuse", &g_diffuse);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_ambient", &g_ambient);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_specular", &g_specular);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &g_light_dir);
 
 
 	g_camera.x = g_light_pos.x;
@@ -447,27 +425,27 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_camera.z = g_light_pos.z;
 	g_camera.w = 1.0f;
 
-	g_pPSTableShadow->SetVector(lpdevice, "g_camerapos", &g_camera);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_camerapos", &g_camera);
 
 	// ビューポート
 	D3DVIEWPORT9 vp = { 0, 0, TEXMAP_SIZE, TEXMAP_SIZE, 0.0f, 1.0f };
 
 	SetRenderTarget(lpdevice, g_ShadowSurface2, g_ShadowZbufferSurface2, vp);
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pPlayer->Draw(lpdevice, g_pVSTableShadow, g_pPSTableShadow);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// レンダーターゲット設定
 	SetRenderTarget(lpdevice, g_ShadowSurface, g_ShadowZbufferSurface, vp);
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_world", &g_MatLand);
-	g_land->Draw(lpdevice, g_pVSTableShadow, g_pPSTableShadow);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
+	g_land->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 
-	g_pVSTableShadow->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pPlayer->Draw(lpdevice, g_pVSTableShadow, g_pPSTableShadow);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// 地形描画
 }
@@ -518,42 +496,42 @@ void DrawLand()
 	LPDIRECT3DDEVICE9 lpdevice = g_DXGrobj->GetDXDevice();
 	D3DXVECTOR4 tempVec;
 	lpdevice->SetVertexShader(g_pLandShader->GetVertexShader());
-	lpdevice->SetPixelShader(g_pLandPS);
+	lpdevice->SetPixelShader(g_pLandShader->GetPixelShader());
 
-	int normalindex = g_pPSTableLand->GetSamplerIndex("NormalSampler");
+	int normalindex = g_pLandShader->GetPSTable()->GetSamplerIndex("NormalSampler");
 	lpdevice->SetSamplerState(normalindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	lpdevice->SetTexture(normalindex, g_normaltexture);
 
-	g_pVSTableLand->SetMatrix(lpdevice, "g_world", &g_MatLand);
-	g_pVSTableLand->SetMatrix(lpdevice, "g_view", &g_MatView);
-	g_pVSTableLand->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_MatView);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
 
-	g_pVSTableLand->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_pos", &inv_pos);
-	g_pVSTableLand->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
-	g_pVSTableLand->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_light_dir", &inv_light_dir);
+	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_pos", &inv_pos);
+	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
+	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_light_dir", &inv_light_dir);
 
 	tempVec.x = g_camera.x;
 	tempVec.y = g_camera.y;
 	tempVec.z = g_camera.z;
 	tempVec.w = 0;
-	g_pVSTableLand->SetVector(lpdevice, "g_camera_pos", &tempVec);
-	g_pPSTableLand->SetVector(lpdevice, "g_camera_pos", &tempVec);
+	g_pLandShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
+	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
 	tempVec.x = g_light_dir.x;
 	tempVec.y = g_light_dir.y;
 	tempVec.z = g_light_dir.z;
 	tempVec.w = 0;
-	g_pVSTableLand->SetVector(lpdevice, "g_light_dir", &tempVec);
-	g_pPSTableLand->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pLandShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	
 
-	g_pVSTableLand->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
-	g_pPSTableLand->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
-	g_pVSTableLand->SetMatrix(lpdevice, "g_matuv", &g_matuv);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
+	g_pLandShader->GetPSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
 
-	int index = g_pPSTableLand->GetSamplerIndex("ShadowSampler");
+	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex);
-	g_land->Draw(lpdevice, g_pVSTableLand, g_pPSTableLand);
+	g_land->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
 }
 //******************************************************************************
 //	End of file.

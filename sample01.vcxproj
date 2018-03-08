@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -90,8 +91,11 @@
     <ClCompile Include="shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllHeaderFiles.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
+    <ClInclude Include="ClassInstance.h" />
+    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="mathutil.h" />
