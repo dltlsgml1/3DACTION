@@ -29,6 +29,8 @@ CShader				*g_pPlayerShader = nullptr;
 CShader				*g_pLandShader = nullptr;
 CShader				*g_pShadowShader = nullptr;
 
+CCamera				*g_pCamera = nullptr;
+
 
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
@@ -108,6 +110,11 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_pLandShader->InitShader();
 	g_pShadowShader->InitShader();
 	
+	g_pCamera = new CCamera(D3DX_PI / 2,					// 視野角
+		(float)width / (float)height,	// アスペクト比
+		0.1f,						// ニアプレーン
+		1000.0f);
+
 	if (!sts){
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
@@ -137,23 +144,26 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	}
 
 	// カメラ変換行列作成
-	D3DXMatrixLookAtLH(&g_MatView,
-		&D3DXVECTOR3(g_camera.x,g_camera.y,g_camera.z),		// 視点
-		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
-		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
+	D3DXVECTOR3 cp = D3DXVECTOR3(0.0f, 5.0f, -5.0f);
+	D3DXVECTOR3 fo = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	g_pCamera->SetCameraView(g_DXGrobj->GetDXDevice(),cp, fo);
+	//D3DXMatrixLookAtLH(&g_MatView,
+	//	&D3DXVECTOR3(g_camera.x,g_camera.y,g_camera.z),		// 視点
+	//	&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
+	//	&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
 
-	// カメラ行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
+	//// カメラ行列を固定パイプラインへセット
+	//g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
 
-	// プロジェクション変換行列作成
-	D3DXMatrixPerspectiveFovLH(&g_MatProjection,
-		D3DX_PI / 2,					// 視野角
-		(float)width / (float)height,	// アスペクト比
-		0.1f,						// ニアプレーン
-		1000.0f);					// ファープレーン
+	//// プロジェクション変換行列作成
+	//D3DXMatrixPerspectiveFovLH(&g_MatProjection,
+	//	D3DX_PI / 2,					// 視野角
+	//	(float)width / (float)height,	// アスペクト比
+	//	0.1f,						// ニアプレーン
+	//	1000.0f);					// ファープレーン
 
-	// 射影変換行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
+	//// 射影変換行列を固定パイプラインへセット
+	//g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
 	// Ｚバッファ有効
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
 
@@ -458,8 +468,8 @@ void DrawPlayer()
 
 	
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_MatView);
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
 	tempVec.x = g_camera.x;
 	tempVec.y = g_camera.y;
@@ -502,8 +512,8 @@ void DrawLand()
 	lpdevice->SetTexture(normalindex, g_normaltexture);
 
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
-	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_MatView);
-	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_MatProjection);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_pos", &inv_pos);
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
