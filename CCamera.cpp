@@ -8,20 +8,27 @@ CCamera::CCamera(float FOV, float Aspect, float Near, float Far)
 	m_Far = Far;
 	m_UpVector = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 }
+CCamera::CCamera()
+{
+	m_UpVector = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+}
 
 CCamera::~CCamera()
 {
 
 }
 
-void CCamera::SetCameraMat(LPDIRECT3DDEVICE9 Device)
+void CCamera::SetCameraMat()
 {
 	D3DXMatrixLookAtLH(&m_MatView, &m_CameraPos, &m_FocusingPos, &m_UpVector);
-	Device->SetTransform(D3DTS_VIEW, &m_MatView);
-
 	D3DXMatrixPerspectiveFovLH(&m_MatProjection, m_FOV, m_Aspect, m_Near, m_Far);
-	Device->SetTransform(D3DTS_PROJECTION, &m_MatProjection);
+	
 
+}
+void CCamera::SetTransform(LPDIRECT3DDEVICE9 Device)
+{
+	Device->SetTransform(D3DTS_VIEW, &m_MatView);
+	Device->SetTransform(D3DTS_PROJECTION, &m_MatProjection);
 }
 
 void CCamera::SetCameraView(D3DXVECTOR3 CameraPos, D3DXVECTOR3 Focus)

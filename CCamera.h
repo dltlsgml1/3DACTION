@@ -18,11 +18,13 @@ private:
 	D3DXVECTOR3 m_InvCameraPos;
 	
 public:
+	CCamera();
 	CCamera(float FOV, float Aspect, float Near, float Far);
 	~CCamera();
-	void SetCameraMat(LPDIRECT3DDEVICE9 Device);
+	void SetCameraMat();
 	void SetCameraProjection(float FOV, float Aspect, float Near, float Far);
 	void SetCameraView(D3DXVECTOR3 CameraPos, D3DXVECTOR3 Focus);
+	void SetTransform(LPDIRECT3DDEVICE9 Device);
 	D3DXMATRIX GetViewMatrix();
 	D3DXMATRIX GetProjectionMatrix();
 	D3DXVECTOR3 GetCameraPos();

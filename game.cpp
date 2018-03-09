@@ -30,7 +30,7 @@ CShader				*g_pLandShader = nullptr;
 CShader				*g_pShadowShader = nullptr;
 
 CCamera				*g_pCamera = nullptr;
-
+CCamera				*g_pCameraFromLight = nullptr;
 
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
@@ -112,6 +112,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 		(float)width / (float)height,	// アスペクト比
 		0.1f,						// ニアプレーン
 		1000.0f);
+	g_pCameraFromLight = new CCamera();
 
 	if (!sts){
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
@@ -246,7 +247,12 @@ void GameUpdate(){
 	static int angle = 0;
 
 	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 5.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	g_pCamera->SetCameraMat(g_DXGrobj->GetDXDevice());
+	g_pCamera->SetCameraProjection(D3DX_PI / 2,					// 視野角
+		(float)SCREEN_X / (float)SCREEN_Y,	// アスペクト比
+		0.1f,						// ニアプレーン
+		1000.0f);
+	g_pCamera->SetCameraMat();
+	g_pCamera->SetTransform(g_DXGrobj->GetDXDevice());
 
 	UpdateInput();
 	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
@@ -400,10 +406,19 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	D3DXVECTOR3 playerpos(g_MatPlayer._41, g_MatPlayer._42, g_MatPlayer._43);
 	D3DXVECTOR3 up(0, 1, 0);
 	D3DXVECTOR3 light_dir(g_light_dir.x, g_light_dir.y, g_light_dir.z);
+	D3DXVECTOR4 camerapos;
 
-	D3DXMatrixLookAtLH(&g_lightcameramat, &light_dir, &playerpos, &up);
+	D3DXMATRIX oldpos = g_pCamera->GetViewMatrix();
+	D3DXMATRIX oldpro = g_pCamera->GetProjectionMatrix();
 
-	D3DXMatrixPerspectiveFovLH(&g_lightprojectionmat, D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
+
+	g_pCamera->SetCameraView(light_dir, playerpos);
+	g_pCamera->SetCameraProjection(D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
+	g_pCamera->SetCameraMat();
+
+
+	//D3DXMatrixLookAtLH(&g_lightcameramat, &light_dir, &playerpos, &up);
+	//D3DXMatrixPerspectiveFovLH(&g_lightprojectionmat, D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
 
 	// 頂点シェーダーとピクセルシェーダーをセット
 	lpdevice->SetVertexShader(g_pShadowShader->GetVertexShader());
@@ -413,6 +428,8 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_lightcameramat);
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_lightprojectionmat);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_diffuse", &g_diffuse);
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_ambient", &g_ambient);
@@ -420,12 +437,12 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &g_light_dir);
 
 
-	g_camera.x = g_light_pos.x;
-	g_camera.y = g_light_pos.y;
-	g_camera.z = g_light_pos.z;
-	g_camera.w = 1.0f;
+	camerapos.x = g_light_pos.x;
+	camerapos.y = g_light_pos.y;
+	camerapos.z = g_light_pos.z;
+	camerapos.w = 1.0f;
 
-	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_camerapos", &g_camera);
+	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_camerapos", &camerapos);
 
 	// ビューポート
 	D3DVIEWPORT9 vp = { 0, 0, TEXMAP_SIZE, TEXMAP_SIZE, 0.0f, 1.0f };
@@ -447,7 +464,8 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
 	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
-	// 地形描画
+
+
 }
 
 void DrawPlayer()
@@ -462,10 +480,12 @@ void DrawPlayer()
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
-	tempVec.x = g_camera.x;
-	tempVec.y = g_camera.y;
-	tempVec.z = g_camera.z;
+	
+	tempVec.x = g_pCamera->GetCameraPos().x;
+	tempVec.y = g_pCamera->GetCameraPos().y;
+	tempVec.z = g_pCamera->GetCameraPos().z;
 	tempVec.w = 0;
+
 	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
@@ -510,9 +530,9 @@ void DrawLand()
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_light_dir", &inv_light_dir);
 
-	tempVec.x = g_camera.x;
-	tempVec.y = g_camera.y;
-	tempVec.z = g_camera.z;
+	tempVec.x = g_pCamera->GetCameraPos().x;
+	tempVec.y = g_pCamera->GetCameraPos().y;
+	tempVec.z = g_pCamera->GetCameraPos().z;
 	tempVec.w = 0;
 	g_pLandShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
