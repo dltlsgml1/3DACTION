@@ -153,7 +153,13 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
 
 
-	
+	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 5.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	g_pCamera->SetCameraProjection(D3DX_PI / 2,					// 視野角
+		(float)SCREEN_X / (float)SCREEN_Y,	// アスペクト比
+		0.1f,						// ニアプレーン
+		1000.0f);
+	g_pCamera->SetCameraMat();
+	g_pCamera->SetTransform(g_DXGrobj->GetDXDevice());
 	
 	// イベントハンドル生成
 	g_hEventHandle = CreateEvent(NULL, false, false, NULL);
@@ -239,6 +245,10 @@ void GameInput(){
 //==============================================================================
 void GameUpdate(){
 
+	//g_pCamera->UpdateCameraView(D3DXVECTOR3(0.0f, 0.01f, -0.01f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	g_pCamera->UpdateAngle(D3DXVECTOR3(0.0f, 0.0f, 10.0f));
+
+
 	D3DXVECTOR4 camerapos = D3DXVECTOR4(g_pCamera->GetCameraPos().x,
 										g_pCamera->GetCameraPos().y,
 										g_pCamera->GetCameraPos().z,
@@ -246,13 +256,7 @@ void GameUpdate(){
 
 	static int angle = 0;
 
-	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 5.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	g_pCamera->SetCameraProjection(D3DX_PI / 2,					// 視野角
-		(float)SCREEN_X / (float)SCREEN_Y,	// アスペクト比
-		0.1f,						// ニアプレーン
-		1000.0f);
-	g_pCamera->SetCameraMat();
-	g_pCamera->SetTransform(g_DXGrobj->GetDXDevice());
+	
 
 	UpdateInput();
 	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
@@ -408,34 +412,22 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	D3DXVECTOR3 light_dir(g_light_dir.x, g_light_dir.y, g_light_dir.z);
 	D3DXVECTOR4 camerapos;
 
-	D3DXMATRIX oldpos = g_pCamera->GetViewMatrix();
-	D3DXMATRIX oldpro = g_pCamera->GetProjectionMatrix();
-
-
-	g_pCamera->SetCameraView(light_dir, playerpos);
-	g_pCamera->SetCameraProjection(D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
-	g_pCamera->SetCameraMat();
-
-
-	//D3DXMatrixLookAtLH(&g_lightcameramat, &light_dir, &playerpos, &up);
-	//D3DXMatrixPerspectiveFovLH(&g_lightprojectionmat, D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
+	g_pCameraFromLight->SetCameraView(light_dir, playerpos);
+	g_pCameraFromLight->SetCameraProjection(D3DX_PI / 5, 1.0f, 75.0f, 150.0f);
+	g_pCameraFromLight->SetCameraMat();
 
 	// 頂点シェーダーとピクセルシェーダーをセット
 	lpdevice->SetVertexShader(g_pShadowShader->GetVertexShader());
 	lpdevice->SetPixelShader(g_pShadowShader->GetPixelShader());
 
-	// 定数をセット(頂点シェーダー)
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_lightcameramat);
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_lightprojectionmat);
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCameraFromLight->GetViewMatrix());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCameraFromLight->GetProjectionMatrix());
 
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_diffuse", &g_diffuse);
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_ambient", &g_ambient);
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_specular", &g_specular);
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &g_light_dir);
-
 
 	camerapos.x = g_light_pos.x;
 	camerapos.y = g_light_pos.y;
@@ -463,9 +455,6 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
 	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
-
-
-
 }
 
 void DrawPlayer()
@@ -498,8 +487,8 @@ void DrawPlayer()
 	g_pPlayerShader->GetVSTable()->SetBool(lpdevice, "drawguideline", false);
 	g_pPlayerShader->GetPSTable()->SetBool(lpdevice, "drawguideline", false);
 
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_pCameraFromLight->GetViewMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_pCameraFromLight->GetProjectionMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
 
 	
@@ -545,8 +534,8 @@ void DrawLand()
 	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	
 
-	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_lightcameramat);
-	g_pLandShader->GetPSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_lightprojectionmat);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_pCameraFromLight->GetViewMatrix());
+	g_pLandShader->GetPSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_pCameraFromLight->GetProjectionMatrix());
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
 
 	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
