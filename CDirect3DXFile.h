@@ -17,13 +17,14 @@
 //!	@brief	Xファイルクラス
 //=============================================================================
 class CDirect3DXFile{
-private:
+protected:
 	LPD3DXMESH					m_lpmesh;				// メッシュインターフェイス
 	D3DMATERIAL9*				m_lpmeshmaterials;		// モデルデータのマテリアル
 	LPDIRECT3DTEXTURE9*			m_lpmeshtextures;		// モデルデータのテクスチャ
 	DWORD						m_nummaterial;			// マテリアル数
 public:
-	CDirect3DXFile(){
+	CDirect3DXFile()
+	{
 		m_lpmeshmaterials=NULL;
 		m_lpmeshtextures=NULL;
 		m_lpmesh=NULL;

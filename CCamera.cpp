@@ -1,4 +1,4 @@
-#include "AllHeaderFiles.h"
+#include "CCamera.h"
 
 CCamera::CCamera(float FOV, float Aspect, float Near, float Far)
 {

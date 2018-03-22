@@ -10,14 +10,8 @@
 //-----------------------------------------------------------------------------
 //	Include header files.
 //-----------------------------------------------------------------------------
-#include <Windows.h>
-#include <thread>
-#include "CDirectXGraphics.h"
-#include "CDirect3DXFile.h"
+
 #include "game.h"
-#include "shader.h"
-#include "mathutil.h"
-#include "input.h"
 //-----------------------------------------------------------------------------
 // ƒOƒ[ƒoƒ‹•Ï”
 //-----------------------------------------------------------------------------
@@ -64,7 +58,6 @@ LPDIRECT3DSURFACE9		g_ShadowZbufferSurface2 = nullptr;		// “Š‰eƒeƒNƒXƒ`ƒƒ‚ÖƒŒƒ“ƒ
 
 D3DXVECTOR3			g_angle = { 0.0f,0.0f,0.0f };
 D3DXVECTOR3			g_trans = { 0.0f,0.0f,0.0f };
-D3DXVECTOR4			g_camera = { 0.0f,5.0f,-5.0f,0.0f };
 
 // Œõ‚ÌÝ’èî•ñ
 D3DXVECTOR4		g_light_pos;
@@ -182,7 +175,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
 
-	//edited
 	return	true;
 }
 
@@ -246,9 +238,7 @@ void GameInput(){
 void GameUpdate(){
 
 	//g_pCamera->UpdateCameraView(D3DXVECTOR3(0.0f, 0.01f, -0.01f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	g_pCamera->UpdateAngle(D3DXVECTOR3(0.0f, 0.0f, 10.0f));
-
-
+	
 	D3DXVECTOR4 camerapos = D3DXVECTOR4(g_pCamera->GetCameraPos().x,
 										g_pCamera->GetCameraPos().y,
 										g_pCamera->GetCameraPos().z,

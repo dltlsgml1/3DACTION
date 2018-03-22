@@ -6,7 +6,8 @@
 //*****************************************************************************
 #pragma once
 #include "AllHeaderFiles.h"
-
+#include <Windows.h>
+#include <thread>
 #define		SCREEN_X		1280
 #define		SCREEN_Y		720
 #define		RADIAN(x)		D3DX_PI*(x)/180.0f

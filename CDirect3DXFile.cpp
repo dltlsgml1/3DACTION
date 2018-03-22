@@ -148,8 +148,6 @@ LPD3DXCONSTANTTABLE	PSTable)
 			PSTable->SetBool(lpd3ddevice, "istheretexture", false);
 		}
 		lpd3ddevice->SetMaterial(&m_lpmeshmaterials[i]);	// マテリアルのセット
-		
-		
 		lpd3ddevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 		m_lpmesh->DrawSubset(i);							// サブセットの描画
 		

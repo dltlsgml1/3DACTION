@@ -85,6 +85,7 @@
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
     <ClInclude Include="CGame.h" />
+    <ClInclude Include="CGameObject.h" />
     <ClInclude Include="ClassInstance.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="game.h" />

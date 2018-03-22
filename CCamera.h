@@ -1,5 +1,5 @@
 #pragma once
-
+#include "AllHeaderFiles.h"
 class CCamera
 {
 private:
