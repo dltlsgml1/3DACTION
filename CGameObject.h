@@ -1,13 +1,27 @@
 #pragma once
 #include "CDirect3DXFile.h"
+
+enum class TEXTURETYPES
+{
+	SHADOW,
+	NORMALMAP,
+	MATERIAL
+};
+
+enum class SURFACETYPES
+{
+	SHADOW,
+	ZBUFFER
+};
+
 class CGameObject : public CDirect3DXFile
 {
-private:
+protected:
 	D3DXVECTOR3 m_Pos;
 	D3DXVECTOR3 m_Angle;
 	D3DXMATRIX m_MatWorld;
 
-	LPDIRECT3DTEXTURE9 m_ShadowTex;
+	LPDIRECT3DTEXTURE9 m_ShadowTexture;
 	LPDIRECT3DSURFACE9 m_ShadowSurface;
 	LPDIRECT3DSURFACE9 m_ZBufferSurface;
 	LPDIRECT3DTEXTURE9 m_NormalTexture;
@@ -22,9 +36,8 @@ public:
 	D3DXVECTOR3 GetPos();
 	D3DXVECTOR3 GetAngle();
 	D3DXMATRIX	GetWorldMatrix();
-	LPDIRECT3DTEXTURE9 GetTexture(int TextureNum);
-	LPDIRECT3DTEXTURE9 GetZTexture();
-	LPDIRECT3DSURFACE9 GetSurface(int SurfaceNum);
+	LPDIRECT3DTEXTURE9 GetTexture(int TextureType);
+	LPDIRECT3DSURFACE9 GetSurface(int SurfaceType);
 
 	CGameObject();
 	~CGameObject();

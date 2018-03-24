@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include "game.h"
+#include "CPlayer.h"
 //-----------------------------------------------------------------------------
 // グローバル変数
 //-----------------------------------------------------------------------------
@@ -71,6 +72,10 @@ D3DXMATRIX			g_lightprojectionmat;
 
 LPDIRECT3DTEXTURE9			g_toontexture;
 LPDIRECT3DTEXTURE9			g_normaltexture;
+
+
+CPlayer			*g_pCPlayer = nullptr;
+
 //==============================================================================
 //!	@fn		GameInit
 //!	@brief	ゲーム初期処理
@@ -89,6 +94,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_pPlayer = new CDirect3DXFile();
 	g_land = new CDirect3DXFile();
 
+
+	
 
 
 	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化

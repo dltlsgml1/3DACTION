@@ -1,5 +1,5 @@
 #pragma once
-#include "AllHeaderFiles.h"
+#include <Windows.h>
 
 class CGame
 {
