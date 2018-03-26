@@ -5,7 +5,16 @@
 //!	@author
 //*****************************************************************************
 #pragma once
-#include "AllHeaderFiles.h"
+#include "CPlayer.h"
+#include "CGameObject.h"
+#include "input.h"
+#include "mathutil.h"
+#include "shader.h"
+#include "CDirect3DXFile.h"
+#include "CDirectxGraphics.h"
+#include "CCamera.h"
+#include "CDebug.h"
+
 #include <Windows.h>
 #include <thread>
 #define		SCREEN_X		1280
@@ -25,6 +34,7 @@ void GameRender();
 
 void DrawLand();
 void DrawPlayer();
+void DrawDebug();
 void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice);
 
 //******************************************************************************

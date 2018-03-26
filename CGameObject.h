@@ -36,8 +36,8 @@ public:
 	D3DXVECTOR3 GetPos();
 	D3DXVECTOR3 GetAngle();
 	D3DXMATRIX	GetWorldMatrix();
-	LPDIRECT3DTEXTURE9 GetTexture(TEXTURETYPES TextureType);
-	LPDIRECT3DSURFACE9 GetSurface(SURFACETYPES SurfaceType);
+	LPDIRECT3DTEXTURE9* GetTexture(TEXTURETYPES TextureType);
+	LPDIRECT3DSURFACE9* GetSurface(SURFACETYPES SurfaceType);
 
 	CGameObject();
 	~CGameObject();

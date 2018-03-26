@@ -12,8 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include "game.h"
-#include "CPlayer.h"
-#include "CGameObject.h"
+
 //-----------------------------------------------------------------------------
 // ƒOƒ[ƒoƒ‹•Ï”
 //-----------------------------------------------------------------------------
@@ -76,6 +75,7 @@ LPDIRECT3DTEXTURE9			g_normaltexture;
 
 
 CPlayer			*g_pCPlayer = nullptr;
+CDebug			*g_pDebug = nullptr;
 
 //==============================================================================
 //!	@fn		GameInit
@@ -96,7 +96,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_land = new CDirect3DXFile();
 
 	g_pCPlayer = new CPlayer();
-
+	
 	
 
 
@@ -105,6 +105,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_pPlayerShader = new CShader(g_DXGrobj->GetDXDevice(), "basic.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
 	g_pLandShader = new CShader(g_DXGrobj->GetDXDevice(), "LandShader.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
 	g_pShadowShader = new CShader(g_DXGrobj->GetDXDevice(), "shadow.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
+	g_pDebug = new CDebug(g_DXGrobj->GetDXDevice());
 
 	g_pPlayerShader->InitShader();
 	g_pLandShader->InitShader();
@@ -199,7 +200,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
 
-	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_pCPlayer->GetTexture(TEXTURETYPES::NORMALMAP));
+	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pCPlayer->GetTexture(TEXTURETYPES::NORMALMAP));
 
 	return	true;
 }
@@ -214,42 +215,52 @@ void GameInput(){
 	if (GetKeyboardPress(DIK_A))
 	{
 		g_trans.x -= 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_D))
 	{
 		g_trans.x += 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(+0.1f, 0.0f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_W))
 	{
 		g_trans.z += 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, +0.1f));
 	}
 	if (GetKeyboardPress(DIK_S))
 	{
 		g_trans.z -= 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, -0.1f));
 	}
 	if (GetKeyboardPress(DIK_Z))
 	{
 		g_trans.y += 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, +0.1f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_X))
 	{
 		g_trans.y -= 0.1f;
+		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, -0.1f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_RIGHT))
 	{
 		g_angle.y -= 1.1f;
+		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, -1.1f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_LEFT))
 	{
 		g_angle.y += 1.1f;
+		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, +1.1f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_DOWN))
 	{
 		g_angle.x += 1.1f;
+		g_pCPlayer->UpdateAngle(D3DXVECTOR3(+1.1f, 0.0f, 0.0f));
 	}
 	if (GetKeyboardPress(DIK_UP))
 	{
 		g_angle.x -= 1.1f;
+		g_pCPlayer->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
 	}
 
 
@@ -316,6 +327,7 @@ void GameRender(){
 	LPDIRECT3DSURFACE9 oldzbuffer;
 	D3DVIEWPORT9	oldviewport;
 
+	DrawDebug();
 
 	GetCurrentRendertarget(g_DXGrobj->GetDXDevice(), oldsurface, oldzbuffer, oldviewport);
 	CreateShadowMap(g_DXGrobj->GetDXDevice());
@@ -557,6 +569,13 @@ void DrawLand()
 	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex);
 	g_land->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
+}
+
+void DrawDebug()
+{
+	char	str[128];
+	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetPos().x, g_pCPlayer->GetPos().y, g_pCPlayer->GetPos().z);
+	g_pDebug->DrawTextA(10, 10, str);
 }
 //******************************************************************************
 //	End of file.

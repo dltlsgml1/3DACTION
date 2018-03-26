@@ -43,28 +43,31 @@ D3DXMATRIX	CGameObject::GetWorldMatrix()
 {
 	return m_MatWorld;
 }
-LPDIRECT3DTEXTURE9 CGameObject::GetTexture(TEXTURETYPES TextureType)
+LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
 {
-	LPDIRECT3DTEXTURE9 *temptexture;
+	LPDIRECT3DTEXTURE9 temptexture = nullptr;
 	switch (TextureType)
 	{
 	case TEXTURETYPES::SHADOW:
-		*temptexture = m_ShadowTexture;
+		temptexture = m_ShadowTexture;
 	case TEXTURETYPES::NORMALMAP:
-		*temptexture = m_NormalTexture;
+		temptexture = m_NormalTexture;
 	case TEXTURETYPES::MATERIAL:
-		*temptexture = *m_lpmeshtextures;
+		temptexture = *m_lpmeshtextures;
 	}
-	return *temptexture;
+	return &temptexture;
 }
 
-LPDIRECT3DSURFACE9 CGameObject::GetSurface(SURFACETYPES SurfaceType)
+
+LPDIRECT3DSURFACE9* CGameObject::GetSurface(SURFACETYPES SurfaceType)
 {
+	LPDIRECT3DSURFACE9 tempsurface = nullptr;
 	switch (SurfaceType)
 	{
 	case SURFACETYPES::SHADOW:
-		return m_ShadowSurface;
+		tempsurface = m_ShadowSurface;
 	case SURFACETYPES::ZBUFFER:
-		return m_ZBufferSurface;
+		tempsurface = m_ZBufferSurface;
 	}
+	return &tempsurface;
 }

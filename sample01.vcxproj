@@ -82,6 +82,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CDebug.cpp" />
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="CGame.cpp" />
@@ -94,8 +95,8 @@
     <ClCompile Include="shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AllHeaderFiles.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CDebug.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
     <ClInclude Include="CGame.h" />
