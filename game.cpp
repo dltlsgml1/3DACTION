@@ -13,6 +13,7 @@
 
 #include "game.h"
 #include "CPlayer.h"
+#include "CGameObject.h"
 //-----------------------------------------------------------------------------
 // ƒOƒ[ƒoƒ‹•Ï”
 //-----------------------------------------------------------------------------
@@ -94,6 +95,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_pPlayer = new CDirect3DXFile();
 	g_land = new CDirect3DXFile();
 
+	g_pCPlayer = new CPlayer();
 
 	
 
@@ -119,12 +121,22 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 		return false;
 	}
 
+	sts = g_pCPlayer->LoadXFile("assets/onikiri.x", g_DXGrobj->GetDXDevice());
+	if (!sts)
+	{
+		MessageBox(hwnd, "ERROR!!", "Fail load Xfile", MB_OK);
+		return false;
+	}
+
+	//----
 	sts = g_pPlayer->LoadXFile("assets/onikiri.x", g_DXGrobj->GetDXDevice());
 	if (!sts)
 	{
 		MessageBox(hwnd, "ERROR!!", "Fail load Xfile", MB_OK);
 		return false;
 	}
+
+
 	sts = g_land->LoadXFile("yuka2.x", g_DXGrobj->GetDXDevice());
 	if (!sts)
 	{
@@ -175,12 +187,19 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	InitInput(hinst,hwnd);
 	D3DXMatrixIdentity(&g_MatPlayer);
 	D3DXMatrixIdentity(&g_MatLand);
+
+	D3DXMatrixIdentity(&g_pCPlayer->GetWorldMatrix());
+	
+
+
 	D3DXMatrixScaling(&g_MatLand, 10.0f, 1.0f, 10.0f);
 	D3DXMatrixScaling(&g_Scale, 2.0f, 2.0f, 2.0f);
 	D3DXMatrixScaling(&g_Scale2, 10.0f, 2.0f, 10.0f);
 	
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
+
+	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_pCPlayer->GetTexture(TEXTURETYPES::NORMALMAP));
 
 	return	true;
 }
