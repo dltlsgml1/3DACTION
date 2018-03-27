@@ -14,6 +14,7 @@
 #include "CDirectxGraphics.h"
 #include "CCamera.h"
 #include "CDebug.h"
+#include "CDirectInput.h"
 
 #include <Windows.h>
 #include <thread>

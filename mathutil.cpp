@@ -9,7 +9,7 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include	<d3dx9.h>
-
+#include "mathutil.h"
 //==============================================================================
 //!	@fn		MakeWorldMatrix
 //!	@brief	角度と平行移動量から行列を作る
@@ -30,6 +30,18 @@ void MakeWorldMatrix(D3DXMATRIX& mat,const D3DXVECTOR3& angle,const D3DXVECTOR3&
 	mat = mat*mattrans;
 }
 
+void CMathMethod::MakeWorldMatrix(D3DXMATRIX& mat, const D3DXVECTOR3& angle, const D3DXVECTOR3& trans)
+{
+	D3DXMATRIX matx, maty, matz, mattrans;;
+
+	D3DXMatrixRotationX(&matx, D3DX_PI*angle.x / 180.0f);
+	D3DXMatrixRotationY(&maty, D3DX_PI*angle.y / 180.0f);
+	D3DXMatrixRotationZ(&matz, D3DX_PI*angle.z / 180.0f);
+	mat = matx * maty*matz;
+	D3DXMatrixTranslation(&mattrans, trans.x, trans.y, trans.z);
+
+	mat = mat * mattrans;
+}
 //==============================================================================
 //!	@fn		MakeWorldMatrix
 //!	@brief	角度と平行移動量から行列を作る(積算行列を計算)

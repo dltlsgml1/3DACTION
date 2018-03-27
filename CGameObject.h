@@ -1,5 +1,7 @@
 #pragma once
 #include "CDirect3DXFile.h"
+#include "mathutil.h"
+
 
 enum class TEXTURETYPES
 {

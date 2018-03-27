@@ -76,6 +76,7 @@ LPDIRECT3DTEXTURE9			g_normaltexture;
 
 CPlayer			*g_pCPlayer = nullptr;
 CDebug			*g_pDebug = nullptr;
+CDirectInput	*g_pInput = nullptr;
 
 //==============================================================================
 //!	@fn		GameInit
@@ -96,7 +97,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	g_land = new CDirect3DXFile();
 
 	g_pCPlayer = new CPlayer();
-	
+	g_pInput = new CDirectInput();
 	
 
 
@@ -185,7 +186,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 
 	g_land->AddTangentSpace(g_DXGrobj->GetDXDevice());
 
-	InitInput(hinst,hwnd);
+	g_pInput->InitInput(hinst, hwnd);
+
 	D3DXMatrixIdentity(&g_MatPlayer);
 	D3DXMatrixIdentity(&g_MatLand);
 
@@ -212,52 +214,53 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 //!	@retval	‚È‚µ
 //==============================================================================
 void GameInput(){
-	if (GetKeyboardPress(DIK_A))
+	
+	if (g_pInput->GetKeyboardPress(DIK_A))
 	{
 		g_trans.x -= 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_D))
+	if (g_pInput->GetKeyboardPress(DIK_D))
 	{
 		g_trans.x += 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(+0.1f, 0.0f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_W))
+	if (g_pInput->GetKeyboardPress(DIK_W))
 	{
 		g_trans.z += 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, +0.1f));
 	}
-	if (GetKeyboardPress(DIK_S))
+	if (g_pInput->GetKeyboardPress(DIK_S))
 	{
 		g_trans.z -= 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, -0.1f));
 	}
-	if (GetKeyboardPress(DIK_Z))
+	if (g_pInput->GetKeyboardPress(DIK_Z))
 	{
 		g_trans.y += 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, +0.1f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_X))
+	if (g_pInput->GetKeyboardPress(DIK_X))
 	{
 		g_trans.y -= 0.1f;
 		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, -0.1f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_RIGHT))
+	if (g_pInput->GetKeyboardPress(DIK_RIGHT))
 	{
 		g_angle.y -= 1.1f;
 		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, -1.1f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_LEFT))
+	if (g_pInput->GetKeyboardPress(DIK_LEFT))
 	{
 		g_angle.y += 1.1f;
 		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, +1.1f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_DOWN))
+	if (g_pInput->GetKeyboardPress(DIK_DOWN))
 	{
 		g_angle.x += 1.1f;
 		g_pCPlayer->UpdateAngle(D3DXVECTOR3(+1.1f, 0.0f, 0.0f));
 	}
-	if (GetKeyboardPress(DIK_UP))
+	if (g_pInput->GetKeyboardPress(DIK_UP))
 	{
 		g_angle.x -= 1.1f;
 		g_pCPlayer->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
@@ -280,15 +283,17 @@ void GameUpdate(){
 										g_pCamera->GetCameraPos().y,
 										g_pCamera->GetCameraPos().z,
 										0.0f);
-
 	static int angle = 0;
 
 	
 
-	UpdateInput();
+	g_pInput->UpdateInput();
+
 	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
-	MakeWorldMatrix(g_MatLand, g_angle, g_trans);
 	
+	MakeWorldMatrix(g_MatLand, g_angle, g_trans);
+	MakeWorldMatrix(g_pCPlayer->GetWorldMatrix(), g_pCPlayer->GetAngle(), g_pCPlayer->GetPos());
+
 	g_MatPlayer *= g_Scale;		//ƒTƒCƒY‚Q”{
 	g_MatLand *= g_Scale2;		//ƒTƒCƒY‚P‚O”{
 
@@ -397,7 +402,7 @@ void GameExit()
 		delete g_DXGrobj;
 		g_DXGrobj = nullptr;
 	}
-	UninitInput();
+	g_pInput->UninitInput();
 	delete g_pPlayerShader;
 	delete g_pLandShader;
 	delete g_pShadowShader;
@@ -576,6 +581,12 @@ void DrawDebug()
 	char	str[128];
 	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetPos().x, g_pCPlayer->GetPos().y, g_pCPlayer->GetPos().z);
 	g_pDebug->DrawTextA(10, 10, str);
+
+	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetAngle().x, g_pCPlayer->GetAngle().y, g_pCPlayer->GetAngle().z);
+	g_pDebug->DrawTextA(10, 30, str);
+
+	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetWorldMatrix()._41, g_pCPlayer->GetWorldMatrix()._42, g_pCPlayer->GetWorldMatrix()._43);
+	g_pDebug->DrawTextA(10, 50, str);
 }
 //******************************************************************************
 //	End of file.

@@ -3,51 +3,20 @@
 // 入力処理 [input.cpp]
 //
 //=============================================================================
-#include "input.h"
-
-//*****************************************************************************
-// 定数定義
-//*****************************************************************************
-const int NUM_KEY_MAX = 256;
-
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-HRESULT InitKeyboard(HINSTANCE hInst, HWND hWnd);
-void UninitKeyboard(void);
-HRESULT UpdateKeyboard(void);
-HRESULT InitMouse(HINSTANCE hInst, HWND hWnd);
-void UninitMouse(void);
-HRESULT UpdateMouse(void);
-
-//*****************************************************************************
-// グローバル変数
-//*****************************************************************************
-LPDIRECTINPUT8			m_pDInput = NULL;					// IDirectInput8インターフェースへのポインタ
-LPDIRECTINPUTDEVICE8	m_pDIDevKeyboard = NULL;			// IDirectInputDevice8インターフェースへのポインタ(キーボード)
-LPDIRECTINPUTDEVICE8	m_pDIDevMouse = NULL;				// IDirectInputDevice8インターフェースへのポインタ(マウス)
-BYTE					m_keyState[NUM_KEY_MAX];			// キーボードの状態を受け取るワーク
-BYTE					m_keyStateTrigger[NUM_KEY_MAX];		// キーボードの状態を受け取るワーク
-BYTE					m_keyStateRepeat[NUM_KEY_MAX];		// キーボードの状態を受け取るワーク
-BYTE					m_keyStateRelease[NUM_KEY_MAX];		// キーボードの状態を受け取るワーク
-int						m_keyStateRepeatCnt[NUM_KEY_MAX];	// キーボードのリピートカウンタ
-DIMOUSESTATE2			m_mouseState;						// マウスの状態を受け取るワーク
-DIMOUSESTATE2			m_mouseStateTrigger;				// マウスの状態を受け取るワーク
-POINT					m_MousePoint;						// マウスの現在座標
-HWND					m_hwnd;
+#include "CDirectInput.h"
 
 //=============================================================================
 // 入力処理の初期化
 //=============================================================================
-HRESULT InitInput(HINSTANCE hInst, HWND hWnd)
+HRESULT CDirectInput::InitInput(HINSTANCE hInst, HWND hWnd)
 {
 	HRESULT hr;
 
-	if(!m_pDInput)
+	if (!m_pDInput)
 	{
 		// DirectInputオブジェクトの作成
 		hr = DirectInput8Create(hInst, DIRECTINPUT_VERSION,
-									IID_IDirectInput8, (void**)&m_pDInput, NULL);
+			IID_IDirectInput8, (void**)&m_pDInput, NULL);
 	}
 
 	// キーボードの初期化
@@ -56,7 +25,7 @@ HRESULT InitInput(HINSTANCE hInst, HWND hWnd)
 	// マウスの初期化
 	InitMouse(hInst, hWnd);
 
-	m_hwnd=hWnd;
+	m_hwnd = hWnd;
 
 	return hr;
 }
@@ -64,7 +33,7 @@ HRESULT InitInput(HINSTANCE hInst, HWND hWnd)
 //=============================================================================
 // 入力処理の終了処理
 //=============================================================================
-void UninitInput(void)
+void CDirectInput::UninitInput(void)
 {
 	// キーボードの終了処理
 	UninitKeyboard();
@@ -72,7 +41,7 @@ void UninitInput(void)
 	// マウスの終了処理
 	UninitMouse();
 
-	if(m_pDInput)
+	if (m_pDInput)
 	{
 		m_pDInput->Release();
 		m_pDInput = NULL;
@@ -82,7 +51,7 @@ void UninitInput(void)
 //=============================================================================
 // 入力処理の更新処理
 //=============================================================================
-void UpdateInput(void)
+void CDirectInput::UpdateInput(void)
 {
 	// キーボードの更新
 	UpdateKeyboard();
@@ -94,13 +63,13 @@ void UpdateInput(void)
 //=============================================================================
 // キーボードの初期化
 //=============================================================================
-HRESULT InitKeyboard(HINSTANCE hInst, HWND hWnd)
+HRESULT CDirectInput::InitKeyboard(HINSTANCE hInst, HWND hWnd)
 {
 	HRESULT hr;
 
 	// デバイスオブジェクトを作成
 	hr = m_pDInput->CreateDevice(GUID_SysKeyboard, &m_pDIDevKeyboard, NULL);
-	if(FAILED(hr) || m_pDIDevKeyboard == NULL)
+	if (FAILED(hr) || m_pDIDevKeyboard == NULL)
 	{
 		MessageBox(hWnd, "キーボードがねぇ！", "警告！", MB_ICONWARNING);
 		return hr;
@@ -108,7 +77,7 @@ HRESULT InitKeyboard(HINSTANCE hInst, HWND hWnd)
 
 	// データフォーマットを設定
 	hr = m_pDIDevKeyboard->SetDataFormat(&c_dfDIKeyboard);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
 		return hr;
@@ -116,7 +85,7 @@ HRESULT InitKeyboard(HINSTANCE hInst, HWND hWnd)
 
 	// 協調モードを設定（フォアグラウンド＆非排他モード）
 	hr = m_pDIDevKeyboard->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "キーボードの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
 		return hr;
@@ -131,9 +100,9 @@ HRESULT InitKeyboard(HINSTANCE hInst, HWND hWnd)
 //=============================================================================
 // キーボードの終了処理
 //=============================================================================
-void UninitKeyboard(void)
+void CDirectInput::UninitKeyboard(void)
 {
-	if(m_pDIDevKeyboard)
+	if (m_pDIDevKeyboard)
 	{
 		m_pDIDevKeyboard->Unacquire();
 
@@ -145,7 +114,7 @@ void UninitKeyboard(void)
 //=============================================================================
 // キーボードの更新処理
 //=============================================================================
-HRESULT UpdateKeyboard(void)
+HRESULT CDirectInput::UpdateKeyboard(void)
 {
 	HRESULT hr;
 	BYTE keyStateOld[256];
@@ -155,18 +124,18 @@ HRESULT UpdateKeyboard(void)
 
 	// デバイスからデータを取得
 	hr = m_pDIDevKeyboard->GetDeviceState(sizeof(m_keyState), m_keyState);
-	if(SUCCEEDED(hr))
+	if (SUCCEEDED(hr))
 	{
-		for(int cnt = 0; cnt < NUM_KEY_MAX; cnt++)
+		for (int cnt = 0; cnt < NUM_KEY_MAX; cnt++)
 		{
 			// トリガーとリリースを取得
-			m_keyStateTrigger[cnt] = ( m_keyState[cnt] ^ keyStateOld[cnt] )& m_keyState[cnt];
-			m_keyStateRelease[cnt] = ( m_keyState[cnt] ^ keyStateOld[cnt] )& keyStateOld[cnt];
-			
+			m_keyStateTrigger[cnt] = (m_keyState[cnt] ^ keyStateOld[cnt])& m_keyState[cnt];
+			m_keyStateRelease[cnt] = (m_keyState[cnt] ^ keyStateOld[cnt])& keyStateOld[cnt];
+
 			// キーが押されているならリピートの判定処理
-			if(m_keyState[cnt])
+			if (m_keyState[cnt])
 			{
-				if(m_keyStateRepeatCnt[cnt] < 20)
+				if (m_keyStateRepeatCnt[cnt] < 20)
 				{
 					m_keyStateRepeatCnt[cnt]++;
 					// 「初回入力」もしくは「ボタンを押してから20フレーム経過」
@@ -174,11 +143,11 @@ HRESULT UpdateKeyboard(void)
 					//if(  ||  )
 					// 上記条件以外はリピート用配列のデータを無効にする
 					//else
-					if((m_keyStateRepeatCnt[cnt]==1)  || m_keyStateRepeatCnt[cnt] >=20){
-						m_keyStateRepeat[cnt]=m_keyState[cnt];
+					if ((m_keyStateRepeatCnt[cnt] == 1) || m_keyStateRepeatCnt[cnt] >= 20) {
+						m_keyStateRepeat[cnt] = m_keyState[cnt];
 					}
-					else{
-						m_keyStateRepeat[cnt]=0;
+					else {
+						m_keyStateRepeat[cnt] = 0;
 					}
 				}
 			}
@@ -201,7 +170,7 @@ HRESULT UpdateKeyboard(void)
 //=============================================================================
 // キーボードのプレス状態を取得
 //=============================================================================
-bool GetKeyboardPress(int key)
+bool CDirectInput::GetKeyboardPress(int key)
 {
 	return ((m_keyState[key] & 0x80) != 0);
 }
@@ -209,7 +178,7 @@ bool GetKeyboardPress(int key)
 //=============================================================================
 // キーボードのトリガー状態を取得
 //=============================================================================
-bool GetKeyboardTrigger(int key)
+bool CDirectInput::GetKeyboardTrigger(int key)
 {
 	return ((m_keyStateTrigger[key] & 0x80) != 0);
 }
@@ -217,7 +186,7 @@ bool GetKeyboardTrigger(int key)
 //=============================================================================
 // キーボードのリピート状態を取得
 //=============================================================================
-bool GetKeyboardRepeat(int key)
+bool CDirectInput::GetKeyboardRepeat(int key)
 {
 	return ((m_keyStateRepeat[key] & 0x80) != 0);
 }
@@ -225,7 +194,7 @@ bool GetKeyboardRepeat(int key)
 //=============================================================================
 // キーボードのリリ－ス状態を取得
 //=============================================================================
-bool GetKeyboardRelease(int key)
+bool CDirectInput::GetKeyboardRelease(int key)
 {
 	return ((m_keyStateRelease[key] & 0x80) != 0);
 }
@@ -233,13 +202,13 @@ bool GetKeyboardRelease(int key)
 //=============================================================================
 // マウスの初期化
 //=============================================================================
-HRESULT InitMouse(HINSTANCE hInst, HWND hWnd)
+HRESULT CDirectInput::InitMouse(HINSTANCE hInst, HWND hWnd)
 {
 	HRESULT hr;
 
 	// デバイスオブジェクトを作成
 	hr = m_pDInput->CreateDevice(GUID_SysMouse, &m_pDIDevMouse, NULL);
-	if(FAILED(hr) || m_pDIDevMouse == NULL)
+	if (FAILED(hr) || m_pDIDevMouse == NULL)
 	{
 		MessageBox(hWnd, "マウスがねぇ！", "警告！", MB_ICONWARNING);
 		return hr;
@@ -247,7 +216,7 @@ HRESULT InitMouse(HINSTANCE hInst, HWND hWnd)
 
 	// データフォーマットを設定
 	hr = m_pDIDevMouse->SetDataFormat(&c_dfDIMouse2);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "マウスのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
 		return hr;
@@ -255,7 +224,7 @@ HRESULT InitMouse(HINSTANCE hInst, HWND hWnd)
 
 	// 協調モードを設定（フォアグラウンド＆非排他モード）
 	hr = m_pDIDevMouse->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "マウスの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
 		return hr;
@@ -283,9 +252,9 @@ HRESULT InitMouse(HINSTANCE hInst, HWND hWnd)
 //=============================================================================
 // マウスの終了処理
 //=============================================================================
-void UninitMouse(void)
+void CDirectInput::UninitMouse(void)
 {
-	if(m_pDIDevMouse)
+	if (m_pDIDevMouse)
 	{
 		m_pDIDevMouse->Unacquire();
 
@@ -297,7 +266,7 @@ void UninitMouse(void)
 //=============================================================================
 // マウスの更新処理
 //=============================================================================
-HRESULT UpdateMouse(void)
+HRESULT CDirectInput::UpdateMouse(void)
 {
 	HRESULT hr;
 	DIMOUSESTATE2 mouseStateOld;
@@ -310,13 +279,13 @@ HRESULT UpdateMouse(void)
 
 	// デバイスからデータを取得
 	hr = m_pDIDevMouse->GetDeviceState(sizeof(m_mouseState), &m_mouseState);
-	if(SUCCEEDED(hr))
+	if (SUCCEEDED(hr))
 	{
 		// トリガーの取得
 		//g_mouseStateTrigger.lX = 
 		//g_mouseStateTrigger.lY = 
 		//g_mouseStateTrigger.lZ = 
-		for(int cnt = 0; cnt < 8; cnt++)
+		for (int cnt = 0; cnt < 8; cnt++)
 		{
 			m_mouseStateTrigger.rgbButtons[cnt] = ((mouseStateOld.rgbButtons[cnt] ^ m_mouseState.rgbButtons[cnt]) & m_mouseState.rgbButtons[cnt]);
 		}
@@ -332,7 +301,7 @@ HRESULT UpdateMouse(void)
 //=============================================================================
 // マウスデータ取得(左プレス)
 //=============================================================================
-bool GetMouseLeftPress(void)
+bool CDirectInput::GetMouseLeftPress(void)
 {
 	return ((m_mouseState.rgbButtons[0] & 0x80) != 0);
 }
@@ -340,7 +309,7 @@ bool GetMouseLeftPress(void)
 //=============================================================================
 // マウスデータ取得(左トリガー)
 //=============================================================================
-bool GetMouseLeftTrigger(void)
+bool CDirectInput::GetMouseLeftTrigger(void)
 {
 	return ((m_mouseStateTrigger.rgbButtons[0] & 0x80) != 0);
 }
@@ -348,7 +317,7 @@ bool GetMouseLeftTrigger(void)
 //=============================================================================
 // マウスデータ取得(右プレス)
 //=============================================================================
-bool GetMouseRightPress(void)
+bool CDirectInput::GetMouseRightPress(void)
 {
 	return ((m_mouseState.rgbButtons[1] & 0x8) != 00);
 }
@@ -356,7 +325,7 @@ bool GetMouseRightPress(void)
 //=============================================================================
 // マウスデータ取得(右トリガー)
 //=============================================================================
-bool GetMouseRightTrigger(void)
+bool CDirectInput::GetMouseRightTrigger(void)
 {
 	return ((m_mouseStateTrigger.rgbButtons[1] & 0x80) != 0);
 }
@@ -364,7 +333,7 @@ bool GetMouseRightTrigger(void)
 //=============================================================================
 // マウスデータ取得(中央プレス)
 //=============================================================================
-bool GetMouseCenterPress(void)
+bool CDirectInput::GetMouseCenterPress(void)
 {
 	return ((m_mouseState.rgbButtons[2] & 0x80) != 0);
 }
@@ -372,7 +341,7 @@ bool GetMouseCenterPress(void)
 //=============================================================================
 // マウスデータ取得(中央トリガー)
 //=============================================================================
-bool GetMouseCenterTrigger(void)
+bool CDirectInput::GetMouseCenterTrigger(void)
 {
 	return ((m_mouseState.rgbButtons[2] & 0x80) != 0);
 }
@@ -380,7 +349,7 @@ bool GetMouseCenterTrigger(void)
 //=============================================================================
 // マウスデータ取得(Ｘ軸移動)
 //=============================================================================
-long GetMouseAxisX(void)
+long CDirectInput::GetMouseAxisX(void)
 {
 	return m_mouseState.lX;
 }
@@ -388,7 +357,7 @@ long GetMouseAxisX(void)
 //=============================================================================
 // マウスデータ取得(Ｙ軸移動)
 //=============================================================================
-long GetMouseAxisY(void)
+long CDirectInput::GetMouseAxisY(void)
 {
 	return m_mouseState.lY;
 }
@@ -396,7 +365,7 @@ long GetMouseAxisY(void)
 //=============================================================================
 // マウスデータ取得(Ｚ軸移動)
 //=============================================================================
-long GetMouseAxisZ(void)
+long CDirectInput::GetMouseAxisZ(void)
 {
 	return m_mouseState.lZ;
 }
@@ -404,7 +373,7 @@ long GetMouseAxisZ(void)
 //=============================================================================
 // マウス座標取得(X)
 //=============================================================================
-long GetMouseX(void)
+long CDirectInput::GetMouseX(void)
 {
 	return m_MousePoint.x;
 }
@@ -412,7 +381,7 @@ long GetMouseX(void)
 //=============================================================================
 // マウス座標取得(Y)
 //=============================================================================
-long GetMouseY(void)
+long CDirectInput::GetMouseY(void)
 {
 	return m_MousePoint.y;
 }
