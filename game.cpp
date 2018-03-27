@@ -45,16 +45,6 @@ D3DXVECTOR4			inv_light_dir;
 D3DXVECTOR4			inv_camera_pos;
 D3DXVECTOR4			inv_pos;
 
-
-LPDIRECT3DTEXTURE9		g_ShadowTex = nullptr;				// 投影シャドウテクスチャ
-LPDIRECT3DSURFACE9		g_ShadowSurface = nullptr;			// 投影シャドウテクスチャサーフェス	
-LPDIRECT3DSURFACE9		g_ShadowZbufferSurface = nullptr;		// 投影テクスチャへレンダリングする際のＺバッファ（深度バッファ）
-
-LPDIRECT3DTEXTURE9		g_ShadowTex2 = nullptr;				// 投影シャドウテクスチャ
-LPDIRECT3DSURFACE9		g_ShadowSurface2 = nullptr;			// 投影シャドウテクスチャサーフェス	
-LPDIRECT3DSURFACE9		g_ShadowZbufferSurface2 = nullptr;		// 投影テクスチャへレンダリングする際のＺバッファ（深度バッファ）
-
-
 // 光の設定情報
 D3DXVECTOR4		g_light_pos;
 D3DXVECTOR4		g_light_dir(0.0f, 1.0f, 0.0f, 0.0f);		// 光の方向
@@ -66,7 +56,6 @@ D3DXMATRIX			g_lightcameramat;
 D3DXMATRIX			g_lightprojectionmat;
 
 LPDIRECT3DTEXTURE9			g_toontexture;
-LPDIRECT3DTEXTURE9			g_normaltexture;
 
 
 CPlayer			*g_pPlayer = nullptr;
@@ -133,12 +122,25 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	}
 
 
-	sts = CreateRenderTarget(g_DXGrobj->GetDXDevice(), TEXMAP_SIZE, TEXMAP_SIZE, D3DFMT_R32F, &g_ShadowTex, &g_ShadowSurface, &g_ShadowZbufferSurface);
+	sts = CreateRenderTarget(g_DXGrobj->GetDXDevice(),
+		TEXMAP_SIZE,
+		TEXMAP_SIZE,
+		D3DFMT_R32F,
+		g_pPlayer->GetTexture(TEXTURETYPES::SHADOW),
+		g_pPlayer->GetSurface(SURFACETYPES::SHADOW),
+		g_pPlayer->GetSurface(SURFACETYPES::ZBUFFER));
 	if (!sts) {
 		MessageBox(nullptr, "ERROR!!", "ShadowTexture 生成エラー", MB_OK);
 		return false;
 	}
-	sts = CreateRenderTarget(g_DXGrobj->GetDXDevice(), TEXMAP_SIZE, TEXMAP_SIZE, D3DFMT_R32F, &g_ShadowTex2, &g_ShadowSurface2, &g_ShadowZbufferSurface2);
+
+	sts = CreateRenderTarget(g_DXGrobj->GetDXDevice(),
+		TEXMAP_SIZE,
+		TEXMAP_SIZE,
+		D3DFMT_R32F,
+		g_pLand->GetTexture(TEXTURETYPES::SHADOW),
+		g_pLand->GetSurface(SURFACETYPES::SHADOW),
+		g_pLand->GetSurface(SURFACETYPES::ZBUFFER));
 	if (!sts) {
 		MessageBox(nullptr, "ERROR!!", "ShadowTexture 生成エラー", MB_OK);
 		return false;
@@ -184,8 +186,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	D3DXMatrixScaling(&g_Scale2, 10.0f, 2.0f, 10.0f);
 	
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
-	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
-
+	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
+	
 	return	true;
 }
 
@@ -458,13 +460,13 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	// ビューポート
 	D3DVIEWPORT9 vp = { 0, 0, TEXMAP_SIZE, TEXMAP_SIZE, 0.0f, 1.0f };
 
-	SetRenderTarget(lpdevice, g_ShadowSurface2, g_ShadowZbufferSurface2, vp);
+	SetRenderTarget(lpdevice, *g_pPlayer->GetSurface(SURFACETYPES::SHADOW), *g_pPlayer->GetSurface(SURFACETYPES::ZBUFFER), vp);
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
 	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// レンダーターゲット設定
-	SetRenderTarget(lpdevice, g_ShadowSurface, g_ShadowZbufferSurface, vp);
+	SetRenderTarget(lpdevice, *g_pLand->GetSurface(SURFACETYPES::SHADOW), *g_pLand->GetSurface(SURFACETYPES::ZBUFFER), vp);
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 
@@ -515,7 +517,7 @@ void DrawPlayer()
 	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	lpdevice->SetTexture(toonindex, g_toontexture);
 	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
-	lpdevice->SetTexture(index, g_ShadowTex2);
+	lpdevice->SetTexture(index, *g_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
 	
 	g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
@@ -529,8 +531,7 @@ void DrawLand()
 
 	int normalindex = g_pLandShader->GetPSTable()->GetSamplerIndex("NormalSampler");
 	lpdevice->SetSamplerState(normalindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	lpdevice->SetTexture(normalindex, g_normaltexture);
-	
+	lpdevice->SetTexture(normalindex, *g_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
 
 
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pLand->GetWorldMatrix());
@@ -561,7 +562,7 @@ void DrawLand()
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
 
 	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
-	lpdevice->SetTexture(index, g_ShadowTex);
+	lpdevice->SetTexture(index, *g_pLand->GetTexture(TEXTURETYPES::SHADOW));
 	g_pLand->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
 }
 

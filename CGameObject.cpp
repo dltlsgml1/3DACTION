@@ -38,6 +38,17 @@ void CGameObject::UpdatePos(D3DXVECTOR3 Pos)
 	m_Pos += Pos;
 	CMathMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
 }
+void CGameObject::SetTextureFromFile(LPDIRECT3DDEVICE9 lpdevice, LPSTR Filename, TEXTURETYPES Texture)
+{
+	switch (Texture)
+	{
+	case TEXTURETYPES::NORMALMAP:
+		D3DXCreateTextureFromFile(lpdevice, Filename, &m_NormalTexture);
+		break;
+	}
+	//D3DXCreateTextureFromFile(lpdevice,Filename,)
+}
+
 
 D3DXVECTOR3 CGameObject::GetPos()
 {
@@ -54,29 +65,34 @@ D3DXMATRIX	CGameObject::GetWorldMatrix()
 }
 LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
 {
-	LPDIRECT3DTEXTURE9 temptexture = nullptr;
+	LPDIRECT3DTEXTURE9 *temptexture = nullptr;
 	switch (TextureType)
 	{
 	case TEXTURETYPES::SHADOW:
-		temptexture = m_ShadowTexture;
+		temptexture = &m_ShadowTexture;
+		break;
 	case TEXTURETYPES::NORMALMAP:
-		temptexture = m_NormalTexture;
+		temptexture = &m_NormalTexture;
+		break;
 	case TEXTURETYPES::MATERIAL:
-		temptexture = *m_lpmeshtextures;
+		temptexture = m_lpmeshtextures;
+		break;
 	}
-	return &temptexture;
+	return temptexture;
 }
 
 
 LPDIRECT3DSURFACE9* CGameObject::GetSurface(SURFACETYPES SurfaceType)
 {
-	LPDIRECT3DSURFACE9 tempsurface = nullptr;
+	LPDIRECT3DSURFACE9 *tempsurface = nullptr;
 	switch (SurfaceType)
 	{
 	case SURFACETYPES::SHADOW:
-		tempsurface = m_ShadowSurface;
+		tempsurface = &m_ShadowSurface;
+		break;
 	case SURFACETYPES::ZBUFFER:
-		tempsurface = m_ZBufferSurface;
+		tempsurface = &m_ZBufferSurface;
+		break;
 	}
-	return &tempsurface;
+	return tempsurface;
 }
