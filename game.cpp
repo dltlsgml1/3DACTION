@@ -202,8 +202,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", &g_normaltexture);
 
-	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pCPlayer->GetTexture(TEXTURETYPES::NORMALMAP));
-
 	return	true;
 }
 
@@ -290,9 +288,7 @@ void GameUpdate(){
 	g_pInput->UpdateInput();
 
 	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
-	
 	MakeWorldMatrix(g_MatLand, g_angle, g_trans);
-	MakeWorldMatrix(g_pCPlayer->GetWorldMatrix(), g_pCPlayer->GetAngle(), g_pCPlayer->GetPos());
 
 	g_MatPlayer *= g_Scale;		//ƒTƒCƒY‚Q”{
 	g_MatLand *= g_Scale2;		//ƒTƒCƒY‚P‚O”{
@@ -476,6 +472,7 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
 	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pCPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgÝ’è
 	SetRenderTarget(lpdevice, g_ShadowSurface, g_ShadowZbufferSurface, vp);
@@ -487,6 +484,7 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 }
 
@@ -543,6 +541,8 @@ void DrawLand()
 	int normalindex = g_pLandShader->GetPSTable()->GetSamplerIndex("NormalSampler");
 	lpdevice->SetSamplerState(normalindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	lpdevice->SetTexture(normalindex, g_normaltexture);
+	
+
 
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
