@@ -22,6 +22,7 @@ protected:
 	D3DXVECTOR3 m_Pos;
 	D3DXVECTOR3 m_Angle;
 	D3DXMATRIX m_MatWorld;
+	
 
 	LPDIRECT3DTEXTURE9 m_ShadowTexture;
 	LPDIRECT3DSURFACE9 m_ShadowSurface;

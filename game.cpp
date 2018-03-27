@@ -28,12 +28,9 @@ CCamera				*g_pCamera = nullptr;
 CCamera				*g_pCameraFromLight = nullptr;
 
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
-CDirect3DXFile		*g_land = nullptr;	// Ｘファイルオブジェクト
-CDirect3DXFile		*g_pPlayer = nullptr;
+CGameObject			*g_pLand = nullptr;
 
-D3DXMATRIX			g_MatPlayer;			// ワールド変換行列
 D3DXMATRIX			g_MatLand;			//地形の行列
-D3DXMATRIX			g_Scale;			//２倍にする行列
 D3DXMATRIX			g_Scale2;			//１０倍にする行列
 D3DXMATRIX			g_InvMatLand;		//地形の逆行列
 D3DXMATRIX  g_matuv = {
@@ -57,8 +54,6 @@ LPDIRECT3DTEXTURE9		g_ShadowTex2 = nullptr;				// 投影シャドウテクスチャ
 LPDIRECT3DSURFACE9		g_ShadowSurface2 = nullptr;			// 投影シャドウテクスチャサーフェス	
 LPDIRECT3DSURFACE9		g_ShadowZbufferSurface2 = nullptr;		// 投影テクスチャへレンダリングする際のＺバッファ（深度バッファ）
 
-D3DXVECTOR3			g_angle = { 0.0f,0.0f,0.0f };
-D3DXVECTOR3			g_trans = { 0.0f,0.0f,0.0f };
 
 // 光の設定情報
 D3DXVECTOR4		g_light_pos;
@@ -74,9 +69,11 @@ LPDIRECT3DTEXTURE9			g_toontexture;
 LPDIRECT3DTEXTURE9			g_normaltexture;
 
 
-CPlayer			*g_pCPlayer = nullptr;
+CPlayer			*g_pPlayer = nullptr;
 CDebug			*g_pDebug = nullptr;
 CDirectInput	*g_pInput = nullptr;
+
+
 
 //==============================================================================
 //!	@fn		GameInit
@@ -93,10 +90,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	bool sts;
 
 	g_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
-	g_pPlayer = new CDirect3DXFile();
-	g_land = new CDirect3DXFile();
-
-	g_pCPlayer = new CPlayer();
+	g_pLand = new CGameObject();
+	g_pPlayer = new CPlayer();
 	g_pInput = new CDirectInput();
 	
 
@@ -123,14 +118,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 		return false;
 	}
 
-	sts = g_pCPlayer->LoadXFile("assets/onikiri.x", g_DXGrobj->GetDXDevice());
-	if (!sts)
-	{
-		MessageBox(hwnd, "ERROR!!", "Fail load Xfile", MB_OK);
-		return false;
-	}
-
-	//----
 	sts = g_pPlayer->LoadXFile("assets/onikiri.x", g_DXGrobj->GetDXDevice());
 	if (!sts)
 	{
@@ -138,13 +125,14 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 		return false;
 	}
 
-
-	sts = g_land->LoadXFile("yuka2.x", g_DXGrobj->GetDXDevice());
+	sts = g_pLand->LoadXFile("yuka2.x", g_DXGrobj->GetDXDevice());
 	if (!sts)
 	{
 		MessageBox(hwnd, "ERROR!!", "Fail load Xfile", MB_OK);
 		return false;
 	}
+
+
 	sts = CreateRenderTarget(g_DXGrobj->GetDXDevice(), TEXMAP_SIZE, TEXMAP_SIZE, D3DFMT_R32F, &g_ShadowTex, &g_ShadowSurface, &g_ShadowZbufferSurface);
 	if (!sts) {
 		MessageBox(nullptr, "ERROR!!", "ShadowTexture 生成エラー", MB_OK);
@@ -184,18 +172,15 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	// スレッド生成(ゲームメイン)
 	g_gamemainthread = std::thread(GameMain);
 
-	g_land->AddTangentSpace(g_DXGrobj->GetDXDevice());
+	g_pLand->AddTangentSpace(g_DXGrobj->GetDXDevice());
+
 
 	g_pInput->InitInput(hinst, hwnd);
 
-	D3DXMatrixIdentity(&g_MatLand);
 
-	D3DXMatrixIdentity(&g_pCPlayer->GetWorldMatrix());
 	
 
 
-	D3DXMatrixScaling(&g_MatLand, 10.0f, 1.0f, 10.0f);
-	D3DXMatrixScaling(&g_Scale, 2.0f, 2.0f, 2.0f);
 	D3DXMatrixScaling(&g_Scale2, 10.0f, 2.0f, 10.0f);
 	
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
@@ -214,53 +199,61 @@ void GameInput(){
 	
 	if (g_pInput->GetKeyboardPress(DIK_A))
 	{
-		g_trans.x -= 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
+		g_pLand->UpdatePos(D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
 	}
 	if (g_pInput->GetKeyboardPress(DIK_D))
 	{
-		g_trans.x += 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(+0.1f, 0.0f, 0.0f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(+0.1f, 0.0f, 0.0f));
+		g_pLand->UpdatePos(D3DXVECTOR3(+0.1f, 0.0f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_W))
 	{
-		g_trans.z += 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, +0.1f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, +0.1f));
+		g_pLand->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, +0.1f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_S))
 	{
-		g_trans.z -= 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, -0.1f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, -0.1f));
+		g_pLand->UpdatePos(D3DXVECTOR3(0.0f, 0.0f, -0.1f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_Z))
 	{
-		g_trans.y += 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, +0.1f, 0.0f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(0.0f, +0.1f, 0.0f));
+		g_pLand->UpdatePos(D3DXVECTOR3(0.0f, +0.1f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_X))
 	{
-		g_trans.y -= 0.1f;
-		g_pCPlayer->UpdatePos(D3DXVECTOR3(0.0f, -0.1f, 0.0f));
+		g_pPlayer->UpdatePos(D3DXVECTOR3(0.0f, -0.1f, 0.0f));
+		g_pLand->UpdatePos(D3DXVECTOR3(0.0f, -0.1f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_RIGHT))
 	{
-		g_angle.y -= 1.1f;
-		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, -1.1f, 0.0f));
+		g_pPlayer->UpdateAngle(D3DXVECTOR3(0.0f, -1.1f, 0.0f));
+		g_pLand->UpdateAngle(D3DXVECTOR3(0.0f, -1.1f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_LEFT))
 	{
-		g_angle.y += 1.1f;
-		g_pCPlayer->UpdateAngle(D3DXVECTOR3(0.0f, +1.1f, 0.0f));
+		g_pPlayer->UpdateAngle(D3DXVECTOR3(0.0f, +1.1f, 0.0f));
+		g_pLand->UpdateAngle(D3DXVECTOR3(0.0f, +1.1f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_DOWN))
 	{
-		g_angle.x += 1.1f;
-		g_pCPlayer->UpdateAngle(D3DXVECTOR3(+1.1f, 0.0f, 0.0f));
+		g_pPlayer->UpdateAngle(D3DXVECTOR3(+1.1f, 0.0f, 0.0f));
+		g_pLand->UpdateAngle(D3DXVECTOR3(+1.1f, 0.0f, 0.0f));
+
 	}
 	if (g_pInput->GetKeyboardPress(DIK_UP))
 	{
-		g_angle.x -= 1.1f;
-		g_pCPlayer->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
+		g_pPlayer->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
+		g_pLand->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
 	}
 
 
@@ -286,9 +279,7 @@ void GameUpdate(){
 
 	g_pInput->UpdateInput();
 
-	MakeWorldMatrix(g_MatLand, g_angle, g_trans);
 
-	g_MatLand *= g_Scale2;		//サイズ１０倍
 
 	g_light_pos.x = cosf((angle*D3DX_PI) / 180.0f) * 100;
 	g_light_pos.y = 15.0f;
@@ -300,9 +291,9 @@ void GameUpdate(){
 	g_light_dir.z = (g_light_pos.z);
 
 
-	D3DXMatrixInverse(&g_InvMatLand, nullptr, &g_MatLand);
+	D3DXMatrixInverse(&g_InvMatLand, nullptr, &g_pLand->GetWorldMatrix());
 
-	D3DXVECTOR4 pos(g_MatLand._41, g_MatLand._42, g_MatLand._43, g_MatLand._44);
+	D3DXVECTOR4 pos(g_pLand->GetWorldMatrix()._41, g_pLand->GetWorldMatrix()._42, g_pLand->GetWorldMatrix()._43, g_pLand->GetWorldMatrix()._44);
 	
 	D3DXVec4Transform(&inv_light_dir, &g_light_dir, &g_InvMatLand);
 	D3DXVec4Transform(&inv_camera_pos, &camerapos, &g_InvMatLand);
@@ -332,11 +323,11 @@ void GameRender(){
 	SetRenderTarget(g_DXGrobj->GetDXDevice(), oldsurface, oldzbuffer, oldviewport);
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pCPlayer->GetWorldMatrix());
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pPlayer->GetWorldMatrix());
 	DrawPlayer();
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatLand);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pLand->GetWorldMatrix());
 	DrawLand();
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
@@ -433,9 +424,9 @@ void GameSetEndFlag(){
 
 void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	
-	D3DXVECTOR3 playerpos(g_pCPlayer->GetWorldMatrix()._41,
-						  g_pCPlayer->GetWorldMatrix()._42,
-						  g_pCPlayer->GetWorldMatrix()._43);
+	D3DXVECTOR3 playerpos(g_pPlayer->GetWorldMatrix()._41,
+						  g_pPlayer->GetWorldMatrix()._42,
+						  g_pPlayer->GetWorldMatrix()._43);
 	D3DXVECTOR3 up(0, 1, 0);
 	D3DXVECTOR3 light_dir(g_light_dir.x, g_light_dir.y, g_light_dir.z);
 	D3DXVECTOR4 camerapos;
@@ -448,7 +439,7 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	lpdevice->SetVertexShader(g_pShadowShader->GetVertexShader());
 	lpdevice->SetPixelShader(g_pShadowShader->GetPixelShader());
 
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCameraFromLight->GetViewMatrix());
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCameraFromLight->GetProjectionMatrix());
 
@@ -469,20 +460,20 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 	SetRenderTarget(lpdevice, g_ShadowSurface2, g_ShadowZbufferSurface2, vp);
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
-	g_pCPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
+	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// レンダーターゲット設定
 	SetRenderTarget(lpdevice, g_ShadowSurface, g_ShadowZbufferSurface, vp);
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
-	g_land->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pLand->GetWorldMatrix());
+	g_pLand->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
-	g_pCPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
+	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 }
 
 void DrawPlayer()
@@ -493,7 +484,7 @@ void DrawPlayer()
 	lpdevice->SetPixelShader(g_pPlayerShader->GetPixelShader());
 
 	
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
@@ -525,8 +516,8 @@ void DrawPlayer()
 	lpdevice->SetTexture(toonindex, g_toontexture);
 	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex2);
-	//g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
-	g_pCPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
+	
+	g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
 
 void DrawLand()
@@ -542,7 +533,7 @@ void DrawLand()
 	
 
 
-	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatLand);
+	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pLand->GetWorldMatrix());
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
 	g_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
@@ -571,19 +562,19 @@ void DrawLand()
 
 	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex);
-	g_land->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
+	g_pLand->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
 }
 
 void DrawDebug()
 {
 	char	str[128];
-	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetPos().x, g_pCPlayer->GetPos().y, g_pCPlayer->GetPos().z);
+	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetPos().x, g_pPlayer->GetPos().y, g_pPlayer->GetPos().z);
 	g_pDebug->DrawTextA(10, 10, str);
 
-	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetAngle().x, g_pCPlayer->GetAngle().y, g_pCPlayer->GetAngle().z);
+	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetAngle().x, g_pPlayer->GetAngle().y, g_pPlayer->GetAngle().z);
 	g_pDebug->DrawTextA(10, 30, str);
 
-	sprintf_s(str, "%f %f %f \0", g_pCPlayer->GetWorldMatrix()._41, g_pCPlayer->GetWorldMatrix()._42, g_pCPlayer->GetWorldMatrix()._43);
+	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetWorldMatrix()._41, g_pPlayer->GetWorldMatrix()._42, g_pPlayer->GetWorldMatrix()._43);
 	g_pDebug->DrawTextA(10, 50, str);
 }
 //******************************************************************************
