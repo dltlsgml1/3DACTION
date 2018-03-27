@@ -4,6 +4,10 @@
 
 CGameObject::CGameObject()
 {
+	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Angle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXMatrixIdentity(&m_MatWorld);
+
 }
 
 

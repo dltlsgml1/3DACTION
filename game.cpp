@@ -188,7 +188,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 
 	g_pInput->InitInput(hinst, hwnd);
 
-	D3DXMatrixIdentity(&g_MatPlayer);
 	D3DXMatrixIdentity(&g_MatLand);
 
 	D3DXMatrixIdentity(&g_pCPlayer->GetWorldMatrix());
@@ -287,10 +286,8 @@ void GameUpdate(){
 
 	g_pInput->UpdateInput();
 
-	MakeWorldMatrix(g_MatPlayer, g_angle, g_trans);
 	MakeWorldMatrix(g_MatLand, g_angle, g_trans);
 
-	g_MatPlayer *= g_Scale;		//ƒTƒCƒY‚Q”{
 	g_MatLand *= g_Scale2;		//ƒTƒCƒY‚P‚O”{
 
 	g_light_pos.x = cosf((angle*D3DX_PI) / 180.0f) * 100;
@@ -335,7 +332,7 @@ void GameRender(){
 	SetRenderTarget(g_DXGrobj->GetDXDevice(), oldsurface, oldzbuffer, oldviewport);
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatPlayer);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pCPlayer->GetWorldMatrix());
 	DrawPlayer();
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
@@ -436,7 +433,9 @@ void GameSetEndFlag(){
 
 void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	
-	D3DXVECTOR3 playerpos(g_MatPlayer._41, g_MatPlayer._42, g_MatPlayer._43);
+	D3DXVECTOR3 playerpos(g_pCPlayer->GetWorldMatrix()._41,
+						  g_pCPlayer->GetWorldMatrix()._42,
+						  g_pCPlayer->GetWorldMatrix()._43);
 	D3DXVECTOR3 up(0, 1, 0);
 	D3DXVECTOR3 light_dir(g_light_dir.x, g_light_dir.y, g_light_dir.z);
 	D3DXVECTOR4 camerapos;
@@ -449,7 +448,7 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	lpdevice->SetVertexShader(g_pShadowShader->GetVertexShader());
 	lpdevice->SetPixelShader(g_pShadowShader->GetPixelShader());
 
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCameraFromLight->GetViewMatrix());
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCameraFromLight->GetProjectionMatrix());
 
@@ -470,8 +469,7 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 	SetRenderTarget(lpdevice, g_ShadowSurface2, g_ShadowZbufferSurface2, vp);
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
 	g_pCPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgÝ’è
@@ -483,9 +481,8 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_land->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 
-	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
-	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
-	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
+	g_pCPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 }
 
 void DrawPlayer()
@@ -496,7 +493,7 @@ void DrawPlayer()
 	lpdevice->SetPixelShader(g_pPlayerShader->GetPixelShader());
 
 	
-	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_MatPlayer);
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pCPlayer->GetWorldMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
@@ -528,7 +525,8 @@ void DrawPlayer()
 	lpdevice->SetTexture(toonindex, g_toontexture);
 	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, g_ShadowTex2);
-	g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
+	//g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
+	g_pCPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
 
 void DrawLand()
