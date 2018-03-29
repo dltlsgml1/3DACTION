@@ -19,34 +19,24 @@ CGameObject::~CGameObject()
 void CGameObject::SetAngle(D3DXVECTOR3 Angle)
 {
 	m_Angle = Angle;
-	CMathMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
+	CStaticMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
 	
 }
 
 void CGameObject::SetPos(D3DXVECTOR3 Pos)
 {
 	m_Pos = Pos;
-	CMathMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
+	CStaticMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
 }
 void CGameObject::UpdateAngle(D3DXVECTOR3 Angle)
 {
 	m_Angle += Angle;
-	CMathMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
+	CStaticMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
 }
 void CGameObject::UpdatePos(D3DXVECTOR3 Pos)
 {
 	m_Pos += Pos;
-	CMathMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
-}
-void CGameObject::SetTextureFromFile(LPDIRECT3DDEVICE9 lpdevice, LPSTR Filename, TEXTURETYPES Texture)
-{
-	switch (Texture)
-	{
-	case TEXTURETYPES::NORMALMAP:
-		D3DXCreateTextureFromFile(lpdevice, Filename, &m_NormalTexture);
-		break;
-	}
-	//D3DXCreateTextureFromFile(lpdevice,Filename,)
+	CStaticMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
 }
 
 

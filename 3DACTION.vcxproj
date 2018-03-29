@@ -90,10 +90,9 @@
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mathutil.cpp" />
-    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="CStaticMethod.cpp" />
+    <ClCompile Include="CShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h" />
@@ -106,9 +105,8 @@
     <ClInclude Include="ClassInstance.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="input.h" />
-    <ClInclude Include="mathutil.h" />
-    <ClInclude Include="shader.h" />
+    <ClInclude Include="CStaticMethod.h" />
+    <ClInclude Include="CShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="basic.hlsl">

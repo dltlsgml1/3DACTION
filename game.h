@@ -7,9 +7,8 @@
 #pragma once
 #include "CPlayer.h"
 #include "CGameObject.h"
-#include "input.h"
-#include "mathutil.h"
-#include "shader.h"
+#include "CStaticMethod.h"
+#include "CShader.h"
 #include "CDirect3DXFile.h"
 #include "CDirectxGraphics.h"
 #include "CCamera.h"

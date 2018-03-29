@@ -30,8 +30,6 @@ CCamera				*g_pCameraFromLight = nullptr;
 CDirectXGraphics	*g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
 CGameObject			*g_pLand = nullptr;
 
-D3DXMATRIX			g_MatLand;			//地形の行列
-D3DXMATRIX			g_Scale2;			//１０倍にする行列
 D3DXMATRIX			g_InvMatLand;		//地形の逆行列
 D3DXMATRIX  g_matuv = {
 	0.5f,  0.0f, 0.0f, 0.0f,
@@ -39,7 +37,6 @@ D3DXMATRIX  g_matuv = {
 	0.0f,  0.0f, 1.0f, 0.0f,
 	0.5f,  0.5f, 0.0f, 1.0f
 };
-
 
 D3DXVECTOR4			inv_light_dir;
 D3DXVECTOR4			inv_camera_pos;
@@ -56,7 +53,6 @@ D3DXMATRIX			g_lightcameramat;
 D3DXMATRIX			g_lightprojectionmat;
 
 LPDIRECT3DTEXTURE9			g_toontexture;
-
 
 CPlayer			*g_pPlayer = nullptr;
 CDebug			*g_pDebug = nullptr;
@@ -183,7 +179,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 	
 
 
-	D3DXMatrixScaling(&g_Scale2, 10.0f, 2.0f, 10.0f);
 	
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
@@ -257,8 +252,6 @@ void GameInput(){
 		g_pPlayer->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
 		g_pLand->UpdateAngle(D3DXVECTOR3(-1.1f, 0.0f, 0.0f));
 	}
-
-
 }
 
 //==============================================================================
@@ -276,12 +269,7 @@ void GameUpdate(){
 										g_pCamera->GetCameraPos().z,
 										0.0f);
 	static int angle = 0;
-
-	
-
 	g_pInput->UpdateInput();
-
-
 
 	g_light_pos.x = cosf((angle*D3DX_PI) / 180.0f) * 100;
 	g_light_pos.y = 15.0f;
@@ -450,9 +438,8 @@ void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_specular", &g_specular);
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &g_light_dir);
 
-	camerapos.x = g_light_pos.x;
-	camerapos.y = g_light_pos.y;
-	camerapos.z = g_light_pos.z;
+
+	camerapos = g_light_pos;
 	camerapos.w = 1.0f;
 
 	g_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_camerapos", &camerapos);
@@ -491,18 +478,15 @@ void DrawPlayer()
 	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
 	
-	tempVec.x = g_pCamera->GetCameraPos().x;
-	tempVec.y = g_pCamera->GetCameraPos().y;
-	tempVec.z = g_pCamera->GetCameraPos().z;
-	tempVec.w = 0;
+	CStaticMethod::Vec3ToVec4(tempVec, g_pCamera->GetCameraPos(), 0.0f);
+
 
 	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
-	tempVec.x = g_light_dir.x;
-	tempVec.y = g_light_dir.y;
-	tempVec.z = g_light_dir.z;
-	tempVec.w = 1;
+	tempVec = g_light_dir;
+	tempVec.w = 1.0f;
+
 	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	g_pPlayerShader->GetVSTable()->SetBool(lpdevice, "drawguideline", false);
@@ -541,18 +525,15 @@ void DrawLand()
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_pos", &inv_pos);
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
 	g_pLandShader->GetVSTable()->SetVector(g_DXGrobj->GetDXDevice(), "g_inv_light_dir", &inv_light_dir);
+	
+	CStaticMethod::Vec3ToVec4(tempVec, g_pCamera->GetCameraPos(), 0.0f);
 
-	tempVec.x = g_pCamera->GetCameraPos().x;
-	tempVec.y = g_pCamera->GetCameraPos().y;
-	tempVec.z = g_pCamera->GetCameraPos().z;
-	tempVec.w = 0;
 	g_pLandShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
-	tempVec.x = g_light_dir.x;
-	tempVec.y = g_light_dir.y;
-	tempVec.z = g_light_dir.z;
-	tempVec.w = 0;
+	tempVec = g_light_dir;
+	tempVec.w = 0.0f;
+
 	g_pLandShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	g_pLandShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	

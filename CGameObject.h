@@ -1,6 +1,6 @@
 #pragma once
 #include "CDirect3DXFile.h"
-#include "mathutil.h"
+#include "CStaticMethod.h"
 
 
 enum class TEXTURETYPES
@@ -35,7 +35,7 @@ public:
 	void SetAngle(D3DXVECTOR3 Angle);
 	void UpdatePos(D3DXVECTOR3 Pos);
 	void UpdateAngle(D3DXVECTOR3 Angle);
-	void SetTextureFromFile(LPDIRECT3DDEVICE9 lpdevice, LPSTR Filename, TEXTURETYPES Texture);
+	
 	
 	D3DXVECTOR3 GetPos();
 	D3DXVECTOR3 GetAngle();

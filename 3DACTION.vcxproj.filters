@@ -13,95 +13,89 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CDebug.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CDirect3DXFile.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CDirectInput.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CDirectXGraphics.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CGame.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CGameObject.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mathutil.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="CShader.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="shader.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="CStaticMethod.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CDebug.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CDirect3DXFile.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CDirectInput.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CDirectxGraphics.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CGame.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CGameObject.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ClassInstance.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CPlayer.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
-      <Filter>Header</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>Header</Filter>
+    <ClInclude Include="CShader.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mathutil.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>Header</Filter>
+    <ClInclude Include="CStaticMethod.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{25fa41eb-7e73-4dfe-811c-6d72b5d13717}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header">
-      <UniqueIdentifier>{9d6f416d-b476-43c7-a787-7e6cc3a87dcd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL">
       <UniqueIdentifier>{010970d9-f8e8-4c37-9e3a-165a07d2bb21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{9d6f416d-b476-43c7-a787-7e6cc3a87dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{25fa41eb-7e73-4dfe-811c-6d72b5d13717}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

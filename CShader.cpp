@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "CShader.h"
 CShader::CShader(LPDIRECT3DDEVICE9 device,
 	const char* filename,
 	const char* VSShaderModel,
