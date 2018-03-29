@@ -1,10 +1,50 @@
 #include "CGame.h"
-//*****************************************************************************
-//!	@file	game.cpp
-//!	@brief	
-//!	@note	ゲーム処理
-//!	@author	
-//*****************************************************************************
+
+CGame::CGame()
+{
+
+
+	g_pPlayerShader = nullptr;
+	g_pLandShader = nullptr;
+	g_pShadowShader = nullptr;
+	g_pCamera = nullptr;
+	g_pCameraFromLight = nullptr;
+
+	g_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
+	g_pLand = nullptr;
+	g_pPlayer = nullptr;
+	g_pDebug = nullptr;
+    g_pInput = nullptr;
+
+	g_light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);		// 光の方向
+	g_diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);			// 平行光源の色
+	g_ambient = D3DXVECTOR4(0.2f, 0.2f, 0.2f, 0.2f);			// 環境光
+	g_specular = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.2f);
+
+	g_matuv = {
+		0.5f,  0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f,
+		0.0f,  0.0f, 1.0f, 0.0f,
+		0.5f,  0.5f, 0.0f, 1.0f
+	};
+
+}
+
+CGame::~CGame()
+{
+	delete g_pPlayerShader;
+	delete g_pLandShader;
+	delete g_pShadowShader;
+	delete g_pCamera;
+	delete g_pCameraFromLight;
+
+	delete g_DXGrobj;	
+	delete g_pLand;
+	delete g_pPlayer;
+	delete g_pDebug;
+	delete g_pInput;
+}
+
 
 
 //==============================================================================
@@ -20,14 +60,10 @@
 bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool fullscreen)
 {
 	bool sts;
-
 	g_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 	g_pLand = new CGameObject();
 	g_pPlayer = new CPlayer();
 	g_pInput = new CDirectInput();
-
-
-
 	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
 
 	g_pPlayerShader = new CShader(g_DXGrobj->GetDXDevice(), "basic.hlsl", "vs_3_0", "VS", "ps_3_0", "PS");
@@ -116,20 +152,13 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	}
 	// スレッド生成(ゲームメイン)
 	g_gamemainthread = std::thread(&CGame::GameMain,this);
-
+	
 	g_pLand->AddTangentSpace(g_DXGrobj->GetDXDevice());
-
 
 	g_pInput->InitInput(hinst, hwnd);
 
-
-
-
-
-
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
-
 	return	true;
 }
 

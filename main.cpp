@@ -14,6 +14,7 @@
 #include <thread>
 #include <crtdbg.h>
 #include "game.h"
+#include "CGame.h"
 
 //-----------------------------------------------------------------------------
 // マクロの定義
@@ -40,6 +41,9 @@ void	CALLBACK TimerProc(UINT ,UINT,DWORD,DWORD,DWORD);			// タイマ処理
 // グローバル変数
 //-----------------------------------------------------------------------------
 int				g_timerid=0;		// タイマＩＤ
+CGame			*g_pGame = nullptr;
+
+
 
 //==============================================================================
 //!	@fn		WinMain
@@ -127,12 +131,20 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 	ShowWindow(hwnd, nWinMode);
 	UpdateWindow(hwnd);
 
-	// ゲームの初期処理
-	if(!GameInit(hInstance,hwnd,width,height,FULLSCREEN)){
-		GameExit();
-		MessageBox(hwnd,"ERROR!","GameInit Error",MB_OK);
+	g_pGame = new CGame();
+
+	if (!g_pGame->GameInit(hInstance, hwnd, width, height, FULLSCREEN)) {
+		g_pGame->GameExit();
+		MessageBox(hwnd, "ERROR!", "GameInit Error", MB_OK);
 		return false;
 	}
+
+
+	//if(!GameInit(hInstance,hwnd,width,height,FULLSCREEN)){
+	//	GameExit();
+	//	MessageBox(hwnd,"ERROR!","GameInit Error",MB_OK);
+	//	return false;
+	//}
 
 	// イベントタイマーをセットする
 	timeBeginPeriod(1);			// タイマの分解能力を１ｍｓにする
@@ -149,11 +161,13 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 
 	// ゲーム終了フラグをセットする
 	GameSetEndFlag();
+	g_pGame->GameSetEndFlag();
 
 	if( g_timerid ) timeKillEvent(g_timerid);	// マルチメディアタイマの終了
 	timeEndPeriod(1);							// タイマの分解能力もとに戻す
 
-	GameExit();
+	g_pGame->GameExit();
+	delete g_pGame;
 	return (int)msg.wParam;
 }
 

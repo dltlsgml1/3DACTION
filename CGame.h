@@ -17,7 +17,6 @@
 #define		TEXMAP_SIZE		4096*2
 class CGame
 {
-
 private:
 
 	HANDLE				g_hEventHandle;		// イベントハンドル
@@ -48,10 +47,10 @@ private:
 
 	// 光の設定情報
 	D3DXVECTOR4		g_light_pos;
-	D3DXVECTOR4		g_light_dir;// (0.0f, 1.0f, 0.0f, 0.0f);		// 光の方向
-	D3DXVECTOR4		g_diffuse;// (1.0f, 1.0f, 1.0f, 1.0f);			// 平行光源の色
-	D3DXVECTOR4		g_ambient;// (0.2f, 0.2f, 0.2f, 0.2f);			// 環境光
-	D3DXVECTOR4		g_specular;// (1.0f, 1.0f, 1.0f, 0.2f);			// スペキュラ光
+	D3DXVECTOR4		g_light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);		// 光の方向
+	D3DXVECTOR4		g_diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);			// 平行光源の色
+	D3DXVECTOR4		g_ambient = D3DXVECTOR4(0.2f, 0.2f, 0.2f, 0.2f);			// 環境光
+	D3DXVECTOR4		g_specular = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.2f);			// スペキュラ光
 
 	D3DXMATRIX			g_lightcameramat;
 	D3DXMATRIX			g_lightprojectionmat;
@@ -65,7 +64,9 @@ private:
 
 
 public:
-	
+	CGame();
+	~CGame();
+
 	bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool fullscreen);
 	void GameMain();
 	void GameExit();
@@ -79,6 +80,7 @@ public:
 	void DrawPlayer();
 	void DrawDebug();
 	void CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice);
+
 
 	//******************************************************************************
 	//	End of file.
