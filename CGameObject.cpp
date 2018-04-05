@@ -7,7 +7,6 @@ CGameObject::CGameObject()
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Angle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXMatrixIdentity(&m_MatWorld);
-
 }
 
 
@@ -53,9 +52,11 @@ D3DXMATRIX	CGameObject::GetWorldMatrix()
 {
 	return m_MatWorld;
 }
+
+//臨時ポインターを宣言し、そのポインターを欲しい変数を示すようにして、そのポインターのアドレスを
 LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
 {
-	LPDIRECT3DTEXTURE9 *temptexture = nullptr;
+	LPDIRECT3DTEXTURE9 *temptexture = nullptr;		//
 	switch (TextureType)
 	{
 	case TEXTURETYPES::SHADOW:

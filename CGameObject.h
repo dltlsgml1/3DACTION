@@ -2,7 +2,6 @@
 #include "CDirect3DXFile.h"
 #include "CStaticMethod.h"
 
-
 enum class TEXTURETYPES
 {
 	SHADOW,
@@ -21,7 +20,7 @@ class CGameObject : public CDirect3DXFile
 protected:
 	D3DXVECTOR3 m_Pos;
 	D3DXVECTOR3 m_Angle;
-	D3DXMATRIX m_MatWorld;
+	D3DXMATRIX	m_MatWorld;
 	
 
 	LPDIRECT3DTEXTURE9 m_ShadowTexture;
@@ -30,9 +29,11 @@ protected:
 	LPDIRECT3DTEXTURE9 m_NormalTexture;
 	
 public:
-
+	//Set:すぐその値にセットする
 	void SetPos(D3DXVECTOR3 Pos);
 	void SetAngle(D3DXVECTOR3 Angle);
+
+	//Update:引数分＋していく
 	void UpdatePos(D3DXVECTOR3 Pos);
 	void UpdateAngle(D3DXVECTOR3 Angle);
 	
@@ -40,6 +41,8 @@ public:
 	D3DXVECTOR3 GetPos();
 	D3DXVECTOR3 GetAngle();
 	D3DXMATRIX	GetWorldMatrix();
+
+	//ほしいテクスチャやサーフェス変数のアドレスを取得する
 	LPDIRECT3DTEXTURE9* GetTexture(TEXTURETYPES TextureType);
 	LPDIRECT3DSURFACE9* GetSurface(SURFACETYPES SurfaceType);
 

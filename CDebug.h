@@ -2,14 +2,18 @@
 #include <Windows.h>
 #include <d3dx9.h>
 
-class CDebug {
+class CDebug 
+{
 	LPD3DXFONT		m_pFont;
 public:
-	CDebug(LPDIRECT3DDEVICE9 lpdevice) :m_pFont(NULL) {
+	CDebug(LPDIRECT3DDEVICE9 lpdevice) :m_pFont(NULL) 
+	{
 		CreateFont(lpdevice);
 	}
-	~CDebug() {
-		if (m_pFont != NULL) {
+	~CDebug() 
+	{
+		if (m_pFont != NULL) 
+		{
 			m_pFont->Release();
 		}
 		m_pFont = NULL;

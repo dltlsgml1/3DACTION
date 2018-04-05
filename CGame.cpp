@@ -2,8 +2,6 @@
 
 CGame::CGame()
 {
-
-
 	g_pPlayerShader = nullptr;
 	g_pLandShader = nullptr;
 	g_pShadowShader = nullptr;
@@ -151,6 +149,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 		return false;
 	}
 	// スレッド生成(ゲームメイン)
+
 	g_gamemainthread = std::thread(&CGame::GameMain,this);
 	
 	g_pLand->AddTangentSpace(g_DXGrobj->GetDXDevice());
@@ -370,8 +369,10 @@ void CGame::GameExit()
 //!	@param　	
 //!	@retval	なし
 //==============================================================================
-void CGame::GameSetEvent() {
-	if (!g_EndFlag) {
+void CGame::GameSetEvent()
+{
+	if (!g_EndFlag) 
+	{
 		SetEvent(g_hEventHandle);	// 終了フラグがセットされていなければイベントをセットする
 	}
 }

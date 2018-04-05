@@ -13,14 +13,13 @@
 #include <process.h>
 #include <thread>
 #include <crtdbg.h>
-#include "game.h"
 #include "CGame.h"
 
 //-----------------------------------------------------------------------------
 // マクロの定義
 //-----------------------------------------------------------------------------
-#define		NAME			"win32A"
-#define		TITLE			"シェーダ描画"
+#define		NAME			"3DACTION"
+#define		TITLE			"3DACTION"
 
 #define		FULLSCREEN		0				// フルスクリーンフラグ
 
@@ -40,9 +39,8 @@ void	CALLBACK TimerProc(UINT ,UINT,DWORD,DWORD,DWORD);			// タイマ処理
 //-----------------------------------------------------------------------------
 // グローバル変数
 //-----------------------------------------------------------------------------
-int				g_timerid=0;		// タイマＩＤ
-CGame			*g_pGame = nullptr;
-
+int				g_timerid=0;						// タイマＩＤ
+CGame			*g_pGame = nullptr;					//ゲームシーンオブジェクト
 
 
 //==============================================================================
@@ -60,6 +58,7 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 					 LPSTR 		lpszArgs, 		// 起動時の引数（文字列）
 					 int 		nWinMode)		// ウインドウ表示モード
 {
+	
 	HWND			hwnd;						// ウインドウハンドル
 	MSG				msg;						// メッセージ構造体
 	WNDCLASSEX		wcex;						// ウインドウクラス構造体
@@ -124,50 +123,47 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 			height-1,
 			SWP_NOZORDER);
 	}
-
 	if (!hwnd) return FALSE;
 
 	// ウインドウを表示する
 	ShowWindow(hwnd, nWinMode);
 	UpdateWindow(hwnd);
 
-	g_pGame = new CGame();
-
-	if (!g_pGame->GameInit(hInstance, hwnd, width, height, FULLSCREEN)) {
-		g_pGame->GameExit();
-		MessageBox(hwnd, "ERROR!", "GameInit Error", MB_OK);
+	//ゲームシーンオブジェクトの生成
+	g_pGame = new CGame();							
+	
+	if(!g_pGame->GameInit(hInstance,hwnd,width,height,FULLSCREEN))	//初期化及びゲームメイン実行
+	{
+		g_pGame->GameExit();							//初期化失敗時エラー処理
+		MessageBox(hwnd,"ERROR!","GameInit Error",MB_OK);
 		return false;
 	}
-
-
-	//if(!GameInit(hInstance,hwnd,width,height,FULLSCREEN)){
-	//	GameExit();
-	//	MessageBox(hwnd,"ERROR!","GameInit Error",MB_OK);
-	//	return false;
-	//}
 
 	// イベントタイマーをセットする
 	timeBeginPeriod(1);			// タイマの分解能力を１ｍｓにする
 	g_timerid = timeSetEvent(16, 1, TimerProc, 1, TIME_PERIODIC);
 
-	while(1){	// メッセージ･ループ
-		if( !GetMessage(&msg, NULL, 0, 0) ){	// メッセージを取得
+	// メッセージ･ループ
+	while(1)
+	{	
+		if( !GetMessage(&msg, NULL, 0, 0) )
+		{	// メッセージを取得
 			break; 
-		}else{
+		}else
+		{
 			TranslateMessage(&msg); 			// 文字メッセージへのコンバート）
 			DispatchMessage(&msg); 				// メッセージをWndProcへ送る
 		}
 	}
 
 	// ゲーム終了フラグをセットする
-	GameSetEndFlag();
 	g_pGame->GameSetEndFlag();
 
 	if( g_timerid ) timeKillEvent(g_timerid);	// マルチメディアタイマの終了
 	timeEndPeriod(1);							// タイマの分解能力もとに戻す
 
-	g_pGame->GameExit();
-	delete g_pGame;
+	g_pGame->GameExit();			//ゲームシーンの終了
+	delete g_pGame;					//ゲームオブジェクト削除
 	return (int)msg.wParam;
 }
 
@@ -185,9 +181,11 @@ LRESULT WINAPI WndProc(	HWND hwnd, 		// ウィンドウハンドル
 						WPARAM wParam,	// 付帯情報１
 						LPARAM lParam)	// 付帯情報２
 {
-	switch( message ){
+	switch( message )
+	{
 	case WM_KEYDOWN:
-		switch(wParam){
+		switch(wParam)
+		{
 		case VK_ESCAPE:
 			DestroyWindow(hwnd);
 			break;
@@ -214,7 +212,7 @@ LRESULT WINAPI WndProc(	HWND hwnd, 		// ウィンドウハンドル
 //==============================================================================
 void CALLBACK TimerProc(UINT, UINT, DWORD, DWORD, DWORD)
 {
-	GameSetEvent();			// イベントオブジェクトをセットする
+	g_pGame->GameSetEvent();					//CALLBACKとして呼ばれるとスレッドのハンドルをセットする
 }
 
 //******************************************************************************

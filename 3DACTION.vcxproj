@@ -89,7 +89,6 @@
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
-    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CStaticMethod.cpp" />
     <ClCompile Include="CShader.cpp" />
@@ -104,7 +103,6 @@
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="ClassInstance.h" />
     <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="game.h" />
     <ClInclude Include="CStaticMethod.h" />
     <ClInclude Include="CShader.h" />
   </ItemGroup>
