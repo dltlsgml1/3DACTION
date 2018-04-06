@@ -36,14 +36,14 @@ public:
 	}
 	bool AddTangentSpace(LPDIRECT3DDEVICE9 device);
 	bool LoadXFile(char* xfilename,	LPDIRECT3DDEVICE9 lpd3ddevice);
-	LPD3DXMESH GetMesh() const;
-	LPDIRECT3DTEXTURE9* GetTexture() const;
+	
 	void UnLoadXFile();
-	void CDirect3DXFile::Draw(LPDIRECT3DDEVICE9 lpd3ddevice,
-		LPD3DXCONSTANTTABLE	VSTable,
-		LPD3DXCONSTANTTABLE	PSTable);
+
 	void DrawWithAxis(LPDIRECT3DDEVICE9 lpd3ddevice);
 	void DrawAxis(LPDIRECT3DDEVICE9 lpd3ddevice);
+
+	LPD3DXMESH GetMesh() const;
+	LPDIRECT3DTEXTURE9* GetTexture() const;
 };
 
 //******************************************************************************

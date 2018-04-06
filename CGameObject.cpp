@@ -53,10 +53,11 @@ D3DXMATRIX	CGameObject::GetWorldMatrix()
 	return m_MatWorld;
 }
 
-//臨時ポインターを宣言し、そのポインターを欲しい変数を示すようにして、そのポインターのアドレスを
 LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
 {
-	LPDIRECT3DTEXTURE9 *temptexture = nullptr;		//
+	LPDIRECT3DTEXTURE9 *temptexture = nullptr;		//臨時ポインタを宣言
+
+	//要求されたテクスチャ種類によって臨時ポインタが示すものを設定する
 	switch (TextureType)
 	{
 	case TEXTURETYPES::SHADOW:
@@ -68,14 +69,19 @@ LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
 	case TEXTURETYPES::MATERIAL:
 		temptexture = m_lpmeshtextures;
 		break;
+	case TEXTURETYPES::TOON:
+		temptexture = &m_ToonTexture;
+
 	}
-	return temptexture;
+	return temptexture;	//示したらそのアドレスを返す
 }
 
 
 LPDIRECT3DSURFACE9* CGameObject::GetSurface(SURFACETYPES SurfaceType)
 {
-	LPDIRECT3DSURFACE9 *tempsurface = nullptr;
+	LPDIRECT3DSURFACE9 *tempsurface = nullptr;	//臨時ポインタを宣言
+
+	//要求されたサーフェス種類によって臨時ポインタが示すものを設定する
 	switch (SurfaceType)
 	{
 	case SURFACETYPES::SHADOW:
@@ -85,5 +91,60 @@ LPDIRECT3DSURFACE9* CGameObject::GetSurface(SURFACETYPES SurfaceType)
 		tempsurface = &m_ZBufferSurface;
 		break;
 	}
-	return tempsurface;
+	return tempsurface;	//示したらそのアドレスを返す
+}
+void CGameObject::Draw(LPDIRECT3DDEVICE9 lpdevice,
+	LPD3DXCONSTANTTABLE VSTable,
+	LPD3DXCONSTANTTABLE	PSTable)
+{
+	DrawWithShader(lpdevice, VSTable, PSTable);
+}
+
+void CGameObject::DrawWithShader(LPDIRECT3DDEVICE9 lpdevice, LPD3DXCONSTANTTABLE VSTable, LPD3DXCONSTANTTABLE	PSTable)
+{
+	unsigned int i;
+	D3DXVECTOR4 tempVec;
+	for (i = 0; i<m_nummaterial; i++)
+	{
+
+		tempVec.x = 1;
+		tempVec.y = 1;
+		tempVec.z = 1;
+		tempVec.w = 1;
+		VSTable->SetVector(lpdevice, "g_diffuse_power", &tempVec);
+
+		tempVec.x = m_lpmeshmaterials[i].Ambient.r;
+		tempVec.y = m_lpmeshmaterials[i].Ambient.g;
+		tempVec.z = m_lpmeshmaterials[i].Ambient.b;
+		tempVec.w = m_lpmeshmaterials[i].Ambient.a;
+		VSTable->SetVector(lpdevice, "g_ambient_material", &tempVec);
+		PSTable->SetVector(lpdevice, "g_ambient_material", &tempVec);
+
+		tempVec.x = m_lpmeshmaterials[i].Diffuse.r;
+		tempVec.y = m_lpmeshmaterials[i].Diffuse.g;
+		tempVec.z = m_lpmeshmaterials[i].Diffuse.b;
+		tempVec.w = m_lpmeshmaterials[i].Diffuse.a;
+		VSTable->SetVector(lpdevice, "g_diffuse_material", &tempVec);
+		PSTable->SetVector(lpdevice, "g_diffuse_material", &tempVec);
+
+		tempVec.x = m_lpmeshmaterials[i].Specular.r;
+		tempVec.y = m_lpmeshmaterials[i].Specular.g;
+		tempVec.z = m_lpmeshmaterials[i].Specular.b;
+		tempVec.w = m_lpmeshmaterials[i].Specular.a;
+		VSTable->SetVector(lpdevice, "g_specular_material", &tempVec);
+
+		if (m_lpmeshtextures[i] != NULL)
+		{
+			int index = PSTable->GetSamplerIndex("Sampler1");
+			PSTable->SetBool(lpdevice, "istheretexture", true);
+			lpdevice->SetTexture(index, m_lpmeshtextures[i]);		// テクスチャのセット
+		}
+		else
+		{
+			PSTable->SetBool(lpdevice, "istheretexture", false);
+		}
+		lpdevice->SetMaterial(&m_lpmeshmaterials[i]);	// マテリアルのセット
+		lpdevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		m_lpmesh->DrawSubset(i);
+	}
 }

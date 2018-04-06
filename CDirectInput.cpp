@@ -71,7 +71,7 @@ HRESULT CDirectInput::InitKeyboard(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDInput->CreateDevice(GUID_SysKeyboard, &m_pDIDevKeyboard, NULL);
 	if (FAILED(hr) || m_pDIDevKeyboard == NULL)
 	{
-		MessageBox(hWnd, "キーボードがねぇ！", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "No Detected Keyboard！", "ERROR！", MB_ICONWARNING);
 		return hr;
 	}
 
@@ -79,7 +79,7 @@ HRESULT CDirectInput::InitKeyboard(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDIDevKeyboard->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, "キーボードのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "Failed to Set Keyboard format data", "ERROR！", MB_ICONWARNING);
 		return hr;
 	}
 
@@ -87,7 +87,7 @@ HRESULT CDirectInput::InitKeyboard(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDIDevKeyboard->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, "キーボードの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "Failed to Set Keyboard CooperativeLevel", "ERROR！", MB_ICONWARNING);
 		return hr;
 	}
 
@@ -210,7 +210,7 @@ HRESULT CDirectInput::InitMouse(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDInput->CreateDevice(GUID_SysMouse, &m_pDIDevMouse, NULL);
 	if (FAILED(hr) || m_pDIDevMouse == NULL)
 	{
-		MessageBox(hWnd, "マウスがねぇ！", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "No Mouse Detected！", "Error！", MB_ICONWARNING);
 		return hr;
 	}
 
@@ -218,7 +218,7 @@ HRESULT CDirectInput::InitMouse(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDIDevMouse->SetDataFormat(&c_dfDIMouse2);
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, "マウスのデータフォーマットを設定できませんでした。", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "Failed to Set Mouse format data", "Error！", MB_ICONWARNING);
 		return hr;
 	}
 
@@ -226,7 +226,7 @@ HRESULT CDirectInput::InitMouse(HINSTANCE hInst, HWND hWnd)
 	hr = m_pDIDevMouse->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, "マウスの協調モードを設定できませんでした。", "警告！", MB_ICONWARNING);
+		MessageBox(hWnd, "Failed to Set Mouse Cooperative level", "Error！", MB_ICONWARNING);
 		return hr;
 	}
 

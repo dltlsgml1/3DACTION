@@ -7,4 +7,8 @@ private:
 public:
 	CPlayer();
 	~CPlayer();
+
+	virtual void Draw(LPDIRECT3DDEVICE9 lpdevice,
+		LPD3DXCONSTANTTABLE VSTable,
+		LPD3DXCONSTANTTABLE	PSTable);
 };

@@ -36,30 +36,35 @@ bool CDirect3DXFile::LoadXFile( char *xfilename, LPDIRECT3DDEVICE9 lpd3ddevice )
 							&m_nummaterial,			// マテリアル数
 							&m_lpmesh);				// メッシュ
 
-	if( SUCCEEDED(hr) ){
+	if(SUCCEEDED(hr))
+	{
 		D3DXMATERIAL	*d3dxmaterials = (D3DXMATERIAL*)pd3dxmtrlbuffer->GetBufferPointer();	// マテリアルのアドレスを取得
 		m_lpmeshmaterials = new D3DMATERIAL9[m_nummaterial];		// マテリアルコンテナの作成
 		m_lpmeshtextures = new LPDIRECT3DTEXTURE9[m_nummaterial];	// テクスチャコンテナの生成
 		
-		for( i=0 ; i<m_nummaterial ; i++ ){
+		for( i=0 ; i<m_nummaterial ; i++ )
+		{
 			m_lpmeshmaterials[i] = d3dxmaterials[i].MatD3D;
-			m_lpmeshmaterials[i].Emissive = m_lpmeshmaterials[i].Specular = m_lpmeshmaterials[i].Ambient = m_lpmeshmaterials[i].Diffuse;
-			
-
+			m_lpmeshmaterials[i].Emissive =
+				m_lpmeshmaterials[i].Specular =
+				m_lpmeshmaterials[i].Ambient =
+				m_lpmeshmaterials[i].Diffuse;
+		
 			hr = D3DXCreateTextureFromFile(	lpd3ddevice,
 											d3dxmaterials[i].pTextureFilename,
 											&m_lpmeshtextures[i]);
-			if( FAILED(hr) ){
-				m_lpmeshtextures[i]=NULL;
+			if (FAILED(hr))
+			{
+				m_lpmeshtextures[i] = NULL;
 			}
-
 		}
 		pd3dxmtrlbuffer->Release();		// マテリアルバッファのリリース
 		pd3dxmtrlbuffer2->Release();	// マテリアルバッファのリリース
-	}else{
+	}
+	else
+	{
 		return false;
 	}
-	
 	return true;
 }
 
@@ -74,20 +79,29 @@ void CDirect3DXFile::UnLoadXFile()
 {
 	unsigned int i;
 
-	if(m_lpmeshmaterials!=NULL){	// マテリアルオブジェクトの解放
+	// マテリアルオブジェクトの解放
+	if(m_lpmeshmaterials!=NULL)
+	{	
 		delete [] m_lpmeshmaterials;
 		m_lpmeshmaterials=NULL;
 	}
 
-	if(m_lpmeshtextures!=NULL){		// テクスチャオブジェクトの解放
-		for( i=0 ; i<m_nummaterial ; i++ ){
-			if(m_lpmeshtextures[i]!=NULL)	m_lpmeshtextures[i]->Release();
+	if(m_lpmeshtextures!=NULL)
+	// テクスチャオブジェクトの解放
+	{		
+		for( i=0 ; i<m_nummaterial ; i++ )
+		{
+			if (m_lpmeshtextures[i] != NULL)
+			{
+				m_lpmeshtextures[i]->Release();
+			}
 		}
 		delete [] m_lpmeshtextures;
 		m_lpmeshtextures=NULL;
 	}
 
-	if(m_lpmesh!=NULL){		// メッシュ解放
+	if(m_lpmesh!=NULL)
+	{		// メッシュ解放
 		m_lpmesh->Release();
 		m_lpmesh=NULL;
 	}
@@ -100,60 +114,6 @@ void CDirect3DXFile::UnLoadXFile()
 //!	@retval	なし
 //!	@note	
 //==============================================================================
-void CDirect3DXFile::Draw(LPDIRECT3DDEVICE9 lpd3ddevice,
-LPD3DXCONSTANTTABLE	VSTable,
-LPD3DXCONSTANTTABLE	PSTable)
-{
-	unsigned int i;
-	D3DXVECTOR4 tempVec;
-	for( i=0 ; i<m_nummaterial ; i++ )
-	{
-
-		tempVec.x = 1;
-		tempVec.y = 1;
-		tempVec.z = 1;
-		tempVec.w = 1;
-		VSTable->SetVector(lpd3ddevice, "g_diffuse_power", &tempVec);
-
-		tempVec.x = m_lpmeshmaterials[i].Ambient.r;
-		tempVec.y = m_lpmeshmaterials[i].Ambient.g;
-		tempVec.z = m_lpmeshmaterials[i].Ambient.b;
-		tempVec.w = m_lpmeshmaterials[i].Ambient.a;
-		VSTable->SetVector(lpd3ddevice, "g_ambient_material", &tempVec);
-		PSTable->SetVector(lpd3ddevice, "g_ambient_material", &tempVec);
-
-		tempVec.x = m_lpmeshmaterials[i].Diffuse.r;
-		tempVec.y = m_lpmeshmaterials[i].Diffuse.g;
-		tempVec.z = m_lpmeshmaterials[i].Diffuse.b;
-		tempVec.w = m_lpmeshmaterials[i].Diffuse.a;
-		VSTable->SetVector(lpd3ddevice, "g_diffuse_material", &tempVec);
-		PSTable->SetVector(lpd3ddevice, "g_diffuse_material", &tempVec);
-
-
-		tempVec.x = m_lpmeshmaterials[i].Specular.r;
-		tempVec.y = m_lpmeshmaterials[i].Specular.g;
-		tempVec.z = m_lpmeshmaterials[i].Specular.b;
-		tempVec.w = m_lpmeshmaterials[i].Specular.a;
-		VSTable->SetVector(lpd3ddevice, "g_specular_material", &tempVec);
-		
-		
-		if (m_lpmeshtextures[i] != NULL)
-		{
-			int index = PSTable->GetSamplerIndex("Sampler1");
-			PSTable->SetBool(lpd3ddevice, "istheretexture", true);
-			lpd3ddevice->SetTexture(index, m_lpmeshtextures[i]);		// テクスチャのセット
-		}
-		else
-		{
-			PSTable->SetBool(lpd3ddevice, "istheretexture", false);
-		}
-		lpd3ddevice->SetMaterial(&m_lpmeshmaterials[i]);	// マテリアルのセット
-		lpd3ddevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-		m_lpmesh->DrawSubset(i);							// サブセットの描画
-		
-	}
-
-}
 
 //==============================================================================
 //!	@fn		DrawWithAxis

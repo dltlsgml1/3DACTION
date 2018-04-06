@@ -134,7 +134,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
 
 
-	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 5.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	g_pCamera->SetCameraView(D3DXVECTOR3(0.0f, 3.0f, -3.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	g_pCamera->SetCameraProjection(D3DX_PI / 2,					// 視野角
 		(float)SCREEN_X / (float)SCREEN_Y,	// アスペクト比
 		0.1f,						// ニアプレーン
@@ -156,7 +156,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 
 	g_pInput->InitInput(hinst, hwnd);
 
-	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", &g_toontexture);
+	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "ToonPaint.png", g_pPlayer->GetTexture(TEXTURETYPES::TOON));
 	D3DXCreateTextureFromFile(g_DXGrobj->GetDXDevice(), "yukanormal.tga", g_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
 	return	true;
 }
@@ -387,8 +387,6 @@ void CGame::GameSetEndFlag() {
 	g_EndFlag = true;				// 終了フラグをオンにする
 }
 
-
-
 void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 	D3DXVECTOR3 playerpos(g_pPlayer->GetWorldMatrix()._41,
@@ -427,7 +425,7 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	SetRenderTarget(lpdevice, *g_pPlayer->GetSurface(SURFACETYPES::SHADOW), *g_pPlayer->GetSurface(SURFACETYPES::ZBUFFER), vp);
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
-	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pPlayer->DrawWithShader(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 	// レンダーターゲット設定
 	SetRenderTarget(lpdevice, *g_pLand->GetSurface(SURFACETYPES::SHADOW), *g_pLand->GetSurface(SURFACETYPES::ZBUFFER), vp);
@@ -435,11 +433,11 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	lpdevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 0), 1.0f, 0);
 
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pLand->GetWorldMatrix());
-	g_pLand->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pLand->DrawWithShader(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 
 
 	g_pShadowShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
-	g_pPlayer->Draw(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
+	g_pPlayer->DrawWithShader(lpdevice, g_pShadowShader->GetVSTable(), g_pShadowShader->GetPSTable());
 }
 
 void CGame::DrawPlayer()
@@ -480,7 +478,7 @@ void CGame::DrawPlayer()
 	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, *g_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
 
-	g_pPlayer->Draw(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
+	g_pPlayer->DrawWithShader(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
 
 void CGame::DrawLand()
@@ -521,7 +519,7 @@ void CGame::DrawLand()
 
 	int index = g_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, *g_pLand->GetTexture(TEXTURETYPES::SHADOW));
-	g_pLand->Draw(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
+	g_pLand->DrawWithShader(lpdevice, g_pLandShader->GetVSTable(), g_pLandShader->GetPSTable());
 }
 
 void CGame::DrawDebug()
