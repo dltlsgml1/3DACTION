@@ -8,7 +8,9 @@ public:
 	CPlayer();
 	~CPlayer();
 
-	virtual void Draw(LPDIRECT3DDEVICE9 lpdevice,
+	void Draw(LPDIRECT3DDEVICE9 lpdevice,
+		LPDIRECT3DVERTEXSHADER9 VSShader,
 		LPD3DXCONSTANTTABLE VSTable,
+		LPDIRECT3DPIXELSHADER9 PSShader,
 		LPD3DXCONSTANTTABLE	PSTable);
 };

@@ -47,7 +47,7 @@ public:
 	LPDIRECT3DTEXTURE9* GetTexture(TEXTURETYPES TextureType);
 	LPDIRECT3DSURFACE9* GetSurface(SURFACETYPES SurfaceType);
 
-	virtual void Draw(LPDIRECT3DDEVICE9 lpdevice,
+	 void Draw(LPDIRECT3DDEVICE9 lpdevice,
 		LPD3DXCONSTANTTABLE VSTable,
 		LPD3DXCONSTANTTABLE	PSTable);
 	void DrawWithShader(LPDIRECT3DDEVICE9 lpdevice,
