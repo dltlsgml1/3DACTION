@@ -1,12 +1,23 @@
 #include "CPlayer.h"
 
-CPlayer::CPlayer()
-{
 
+CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight)
+{
+	
+	m_pCamera = Camera;
+	m_pCameraFromLight = CameraFromLight;
+	m_Light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);
+	m_MatUV = {
+		0.5f,  0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f,
+		0.0f,  0.0f, 1.0f, 0.0f,
+		0.5f,  0.5f, 0.0f, 1.0f
+	};
 }
 CPlayer::~CPlayer()
 {
-
+	m_pCamera = nullptr;
+	m_pCameraFromLight = nullptr;
 }
 
 void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
@@ -20,19 +31,18 @@ void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
 	lpdevice->SetVertexShader(VSShader);
 	lpdevice->SetPixelShader(PSShader);
 
+	VSTable->SetMatrix(lpdevice, "g_world", &m_MatWorld);
+	VSTable->SetMatrix(lpdevice, "g_view", &m_pCamera->GetViewMatrix());
+	VSTable->SetMatrix(lpdevice, "g_projection", &m_pCamera->GetProjectionMatrix());
 
-	VSTable->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
-	VSTable->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
-	VSTable->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
 
-
-	CStaticMethod::Vec3ToVec4(tempVec, g_pCamera->GetCameraPos(), 0.0f);
+	CStaticMethod::Vec3ToVec4(tempVec, m_pCamera->GetCameraPos(), 0.0f);
 
 
 	VSTable->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	PSTable->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
-	tempVec = g_light_dir;
+	tempVec = m_Light_dir;
 	tempVec.w = 1.0f;
 
 	VSTable->SetVector(lpdevice, "g_light_dir", &tempVec);
@@ -40,16 +50,17 @@ void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
 	VSTable->SetBool(lpdevice, "drawguideline", false);
 	PSTable->SetBool(lpdevice, "drawguideline", false);
 
-	VSTable->SetMatrix(lpdevice, "g_lightposcamera", &g_pCameraFromLight->GetViewMatrix());
-	VSTable->SetMatrix(lpdevice, "g_lightposprojection", &g_pCameraFromLight->GetProjectionMatrix());
-	VSTable->SetMatrix(lpdevice, "g_matuv", &g_matuv);
+
+	VSTable->SetMatrix(lpdevice, "g_lightposcamera", &m_pCameraFromLight->GetViewMatrix());
+	VSTable->SetMatrix(lpdevice, "g_lightposprojection", &m_pCameraFromLight->GetProjectionMatrix());
+	VSTable->SetMatrix(lpdevice, "g_matuv", &m_MatUV);
 
 
 	int toonindex = PSTable->GetSamplerIndex("ToonSampler1");
 	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	lpdevice->SetTexture(toonindex, *g_pPlayer->GetTexture(TEXTURETYPES::TOON));
+	lpdevice->SetTexture(toonindex, m_ToonTexture);
 	int index = PSTable->GetSamplerIndex("ShadowSampler");
-	lpdevice->SetTexture(index, *g_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
+	lpdevice->SetTexture(index, m_ShadowTexture);
 
-	g_pPlayer->DrawWithShader(lpdevice, VSTable, PSTable);
+	DrawWithShader(lpdevice, VSTable, PSTable);
 }

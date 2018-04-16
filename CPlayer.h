@@ -1,11 +1,20 @@
 #pragma once
 #include "CGameObject.h"
+#include "CCamera.h"
+#include "CDebug.h"
+
 class CPlayer : public CGameObject
 {
-private:
+protected:
+	CCamera *m_pCamera;
+	CCamera *m_pCameraFromLight;
+
+	D3DXVECTOR4 m_Light_dir; 
+	D3DXMATRIX m_MatUV;
 	
+
 public:
-	CPlayer();
+	CPlayer(CCamera *Camera,CCamera *CameraFromLight);
 	~CPlayer();
 
 	void Draw(LPDIRECT3DDEVICE9 lpdevice,

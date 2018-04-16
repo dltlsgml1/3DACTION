@@ -60,7 +60,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	bool sts;
 	g_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 	g_pLand = new CGameObject();
-	g_pPlayer = new CPlayer();
+	
 	g_pInput = new CDirectInput();
 	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
 
@@ -78,7 +78,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 		0.1f,						// ニアプレーン
 		1000.0f);
 	g_pCameraFromLight = new CCamera();
-
+	g_pPlayer = new CPlayer(g_pCamera,g_pCameraFromLight);
 	if (!sts) {
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
@@ -289,7 +289,13 @@ void CGame::GameRender() {
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pPlayer->GetWorldMatrix());
-	DrawPlayer();
+	g_pPlayer->Draw(g_DXGrobj->GetDXDevice(),
+		g_pPlayerShader->GetVertexShader(),
+		g_pPlayerShader->GetVSTable(),
+		g_pPlayerShader->GetPixelShader(),
+		g_pPlayerShader->GetPSTable());
+	
+	//DrawPlayer();
 
 	g_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_pLand->GetWorldMatrix());
@@ -442,7 +448,43 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 void CGame::DrawPlayer()
 {
-	
+	LPDIRECT3DDEVICE9 lpdevice = g_DXGrobj->GetDXDevice();
+	D3DXVECTOR4 tempVec;
+	lpdevice->SetVertexShader(g_pPlayerShader->GetVertexShader());
+	lpdevice->SetPixelShader(g_pPlayerShader->GetPixelShader());
+
+
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &g_pPlayer->GetWorldMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &g_pCamera->GetViewMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &g_pCamera->GetProjectionMatrix());
+
+
+	CStaticMethod::Vec3ToVec4(tempVec, g_pCamera->GetCameraPos(), 0.0f);
+
+
+	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
+	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
+
+	tempVec = g_light_dir;
+	tempVec.w = 1.0f;
+
+	g_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
+	g_pPlayerShader->GetVSTable()->SetBool(lpdevice, "drawguideline", false);
+	g_pPlayerShader->GetPSTable()->SetBool(lpdevice, "drawguideline", false);
+
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &g_pCameraFromLight->GetViewMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposprojection", &g_pCameraFromLight->GetProjectionMatrix());
+	g_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
+
+
+	int toonindex = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ToonSampler1");
+	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	lpdevice->SetTexture(toonindex, g_toontexture);
+	int index = g_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
+	lpdevice->SetTexture(index, *g_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
+
+	g_pPlayer->DrawWithShader(lpdevice, g_pPlayerShader->GetVSTable(), g_pPlayerShader->GetPSTable());
 }
 
 void CGame::DrawLand()
@@ -489,14 +531,13 @@ void CGame::DrawLand()
 void CGame::DrawDebug()
 {
 	char	str[128];
-	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetPos().x, g_pPlayer->GetPos().y, g_pPlayer->GetPos().z);
-	g_pDebug->DrawTextA(10, 10, str);
-
-	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetAngle().x, g_pPlayer->GetAngle().y, g_pPlayer->GetAngle().z);
-	g_pDebug->DrawTextA(10, 30, str);
-
-	sprintf_s(str, "%f %f %f \0", g_pPlayer->GetWorldMatrix()._41, g_pPlayer->GetWorldMatrix()._42, g_pPlayer->GetWorldMatrix()._43);
+	sprintf_s(str, "%f %f %f \0", g_pCamera->GetCameraPos().x, g_pCamera->GetCameraPos().y, g_pCamera->GetCameraPos().z);
 	g_pDebug->DrawTextA(10, 50, str);
+
+	sprintf_s(str, "%f %f %f \0", g_pCameraFromLight->GetCameraPos().x, g_pCameraFromLight->GetCameraPos().y, g_pCameraFromLight->GetCameraPos().z);
+	g_pDebug->DrawTextA(10, 70, str);
+
+
 }
 //******************************************************************************
 //	End of file.
