@@ -39,21 +39,21 @@ void CGameObject::UpdatePos(D3DXVECTOR3 Pos)
 }
 
 
-D3DXVECTOR3 CGameObject::GetPos()
+D3DXVECTOR3 CGameObject::GetPos() const
 {
 	return m_Pos;
 }
 
-D3DXVECTOR3 CGameObject::GetAngle()
+D3DXVECTOR3 CGameObject::GetAngle() const
 {
 	return m_Angle;
 }
-D3DXMATRIX	CGameObject::GetWorldMatrix()
+D3DXMATRIX	CGameObject::GetWorldMatrix() const
 {
 	return m_MatWorld;
 }
 
-LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType)
+LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType) 
 {
 	LPDIRECT3DTEXTURE9 *temptexture = nullptr;		//ó’éûÉ|ÉCÉìÉ^ÇêÈåæ
 

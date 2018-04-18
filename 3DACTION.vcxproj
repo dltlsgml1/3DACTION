@@ -88,6 +88,7 @@
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGameObject.cpp" />
+    <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CStaticMethod.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="ClassInstance.h" />
+    <ClInclude Include="CLight.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CStaticMethod.h" />
     <ClInclude Include="CShader.h" />

@@ -255,7 +255,6 @@ void CGame::GameUpdate() {
 	g_light_dir.y = (g_light_pos.y);
 	g_light_dir.z = (g_light_pos.z);
 
-
 	D3DXMatrixInverse(&g_InvMatLand, nullptr, &g_pLand->GetWorldMatrix());
 
 	D3DXVECTOR4 pos(g_pLand->GetWorldMatrix()._41, g_pLand->GetWorldMatrix()._42, g_pLand->GetWorldMatrix()._43, g_pLand->GetWorldMatrix()._44);
