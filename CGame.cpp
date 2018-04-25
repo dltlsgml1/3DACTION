@@ -14,6 +14,7 @@ CGame::CGame()
 	m_pDebug = nullptr;
     m_pInput = nullptr;
 
+	m_pLight = nullptr;
 	g_light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);		// 光の方向
 	g_diffuse = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);			// 平行光源の色
 	g_ambient = D3DXVECTOR4(0.2f, 0.2f, 0.2f, 0.2f);			// 環境光
@@ -41,6 +42,7 @@ CGame::~CGame()
 	delete m_pPlayer;
 	delete m_pDebug;
 	delete m_pInput;
+	delete m_pLight;
 }
 
 
@@ -73,6 +75,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	m_pLandShader->InitShader();
 	m_pShadowShader->InitShader();
 
+	m_pLight = new CLight(D3DXVECTOR4(0.0f, 1.0f, 0.0f,0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pCamera = new CCamera(D3DX_PI / 2,					// 視野角
 		(float)width / (float)height,	// アスペクト比
 		0.1f,						// ニアプレーン
@@ -243,25 +246,24 @@ void CGame::GameUpdate() {
 		m_pCamera->GetCameraPos().y,
 		m_pCamera->GetCameraPos().z,
 		0.0f);
-	static int angle = 0;
+	
 	m_pInput->UpdateInput();
 
-	g_light_pos.x = cosf((angle*D3DX_PI) / 180.0f) * 100;
-	g_light_pos.y = 15.0f;
-	g_light_pos.z = sinf((angle*D3DX_PI) / 180.0f) * 100;
+	static int angle = 0;
+	m_pLight->SetPos(D3DXVECTOR3(cosf((angle*D3DX_PI) / 180.0f) * 100,15.0f, sinf((angle*D3DX_PI) / 180.0f) * 100));
+	m_pLight->SetDirection(D3DXVECTOR4(m_pLight->GetPos(),0.0f));
 	angle++;
 
-	g_light_dir.x = (g_light_pos.x);
-	g_light_dir.y = (g_light_pos.y);
-	g_light_dir.z = (g_light_pos.z);
-
-	D3DXMatrixInverse(&g_InvMatLand, nullptr, &m_pLand->GetWorldMatrix());
-
+	D3DXMatrixInverse(&m_pLand->GetInvMat(), nullptr, &m_pLand->GetWorldMatrix());
+	
 	D3DXVECTOR4 pos(m_pLand->GetWorldMatrix()._41, m_pLand->GetWorldMatrix()._42, m_pLand->GetWorldMatrix()._43, m_pLand->GetWorldMatrix()._44);
 
-	D3DXVec4Transform(&inv_light_dir, &g_light_dir, &g_InvMatLand);
+	D3DXVec4Transform(&m_pLight->GetInvDirection(), &m_pLight->GetDirection(), &m_pLand->GetInvMat());
+	D3DXVec4Transform(&m_pCamera->GetInvCameraPos(), &camerapos, &m_pLand->GetInvMat());
+	D3DXVec4Transform(&m_pLand->GetInvPos(), &pos, &m_pLand->GetInvMat());
+	/*D3DXVec4Transform(&inv_light_dir, &g_light_dir, &g_InvMatLand);
 	D3DXVec4Transform(&inv_camera_pos, &camerapos, &g_InvMatLand);
-	D3DXVec4Transform(&inv_pos, &pos, &g_InvMatLand);
+	D3DXVec4Transform(&inv_pos, &pos, &g_InvMatLand);*/
 }
 
 //==============================================================================
@@ -479,7 +481,7 @@ void CGame::DrawPlayer()
 
 	int toonindex = m_pPlayerShader->GetPSTable()->GetSamplerIndex("ToonSampler1");
 	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	lpdevice->SetTexture(toonindex, g_toontexture);
+	lpdevice->SetTexture(toonindex, *m_pPlayer->GetTexture(TEXTURETYPES::TOON));
 	int index = m_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
 	lpdevice->SetTexture(index, *m_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
 
@@ -502,9 +504,9 @@ void CGame::DrawLand()
 	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &m_pCamera->GetViewMatrix());
 	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &m_pCamera->GetProjectionMatrix());
 
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_pos", &inv_pos);
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &inv_camera_pos);
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_light_dir", &inv_light_dir);
+	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_pos", &m_pLand->GetInvPos());
+	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &m_pCamera->GetInvCameraPos());
+	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_light_dir", &m_pLight->GetInvDirection());
 
 	CStaticMethod::Vec3ToVec4(tempVec, m_pCamera->GetCameraPos(), 0.0f);
 

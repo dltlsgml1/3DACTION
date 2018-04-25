@@ -17,7 +17,7 @@ private:
 	float m_Near;						//カメラから見え始める距離
 	float m_Far;						//カメラから見えなくなる距離
 
-	D3DXVECTOR3 m_InvCameraPos;			//カメラ位置ベクトルの逆ベクトル
+	D3DXVECTOR3 m_InvCameraPos;			//カメラ位置の逆ベクトル
 
 public:
 	CCamera();																		
@@ -40,5 +40,6 @@ public:
 	
 	D3DXMATRIX GetViewMatrix();														
 	D3DXMATRIX GetProjectionMatrix();												
-	D3DXVECTOR3 GetCameraPos();														
+	D3DXVECTOR3 GetCameraPos();	
+	D3DXVECTOR4 GetInvCameraPos();
 };

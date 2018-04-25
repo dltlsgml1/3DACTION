@@ -2,13 +2,14 @@
 #include "CGameObject.h"
 #include "CCamera.h"
 #include "CDebug.h"
+#include "CLight.h"
 
 class CPlayer : public CGameObject
 {
 protected:
 	CCamera *m_pCamera;
 	CCamera *m_pCameraFromLight;
-
+	CLight  *m_pLight;
 	D3DXVECTOR4 m_Light_dir; 
 	D3DXMATRIX m_MatUV;
 	

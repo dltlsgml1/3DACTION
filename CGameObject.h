@@ -23,8 +23,8 @@ protected:
 	D3DXVECTOR3 m_Angle;
 	D3DXMATRIX	m_MatWorld;
 	
-	D3DXVECTOR3 m_InvPos;
-	D3DXMATRIX   m_InvMatWorld;
+	D3DXVECTOR4 m_InvPos;
+	D3DXMATRIX  m_InvMatWorld;
 
 	LPDIRECT3DTEXTURE9 m_ShadowTexture;
 	LPDIRECT3DTEXTURE9 m_NormalTexture;
@@ -45,6 +45,9 @@ public:
 	D3DXVECTOR3 GetPos() const;
 	D3DXVECTOR3 GetAngle() const;
 	D3DXMATRIX	GetWorldMatrix() const;
+	
+	D3DXVECTOR4 GetInvPos() const;
+	D3DXMATRIX  GetInvMat() const;
 
 	//ほしいテクスチャやサーフェス変数のアドレスを取得する
 	LPDIRECT3DTEXTURE9* GetTexture(TEXTURETYPES TextureType) ;

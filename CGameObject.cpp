@@ -19,7 +19,6 @@ void CGameObject::SetAngle(D3DXVECTOR3 Angle)
 {
 	m_Angle = Angle;
 	CStaticMethod::MakeWorldMatrix(m_MatWorld, m_Angle, m_Pos);
-	
 }
 
 void CGameObject::SetPos(D3DXVECTOR3 Pos)
@@ -53,7 +52,18 @@ D3DXMATRIX	CGameObject::GetWorldMatrix() const
 	return m_MatWorld;
 }
 
+D3DXVECTOR4 CGameObject::GetInvPos() const
+{
+	return m_InvPos;
+}
+D3DXMATRIX  CGameObject::GetInvMat() const
+{
+	return m_InvMatWorld;
+}
+
+
 LPDIRECT3DTEXTURE9* CGameObject::GetTexture(TEXTURETYPES TextureType) 
+
 {
 	LPDIRECT3DTEXTURE9 *temptexture = nullptr;		//ó’éûÉ|ÉCÉìÉ^ÇêÈåæ
 

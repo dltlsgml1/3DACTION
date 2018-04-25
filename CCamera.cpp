@@ -88,3 +88,9 @@ D3DXVECTOR3 CCamera::GetCameraPos()
 {
 	return m_CameraPos;
 }
+
+
+D3DXVECTOR4 CCamera::GetInvCameraPos()
+{
+	return m_InvCameraPos;
+}
