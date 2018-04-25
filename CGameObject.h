@@ -32,6 +32,8 @@ protected:
 
 	LPDIRECT3DSURFACE9 m_ShadowSurface;
 	LPDIRECT3DSURFACE9 m_ZBufferSurface;
+
+	void *InstanceAdr[10];
 	
 public:
 	//Set:すぐその値にセットする
@@ -59,6 +61,9 @@ public:
 	void DrawWithShader(LPDIRECT3DDEVICE9 lpdevice,
 		LPD3DXCONSTANTTABLE VSTable,
 		LPD3DXCONSTANTTABLE	PSTable);
+
+	
+
 
 	CGameObject();
 	~CGameObject();

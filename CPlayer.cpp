@@ -1,11 +1,12 @@
 #include "CPlayer.h"
 
 
-CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight)
+CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight,CLight *Light)
 {
 	
 	m_pCamera = Camera;
 	m_pCameraFromLight = CameraFromLight;
+	m_pLight = Light;
 	m_Light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);
 	m_MatUV = {
 		0.5f,  0.0f, 0.0f, 0.0f,
@@ -42,7 +43,7 @@ void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
 	VSTable->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	PSTable->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
-	tempVec = m_Light_dir;
+	tempVec = m_pLight->GetDirection();
 	tempVec.w = 1.0f;
 
 	VSTable->SetVector(lpdevice, "g_light_dir", &tempVec);

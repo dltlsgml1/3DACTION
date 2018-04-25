@@ -81,7 +81,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 		0.1f,						// ニアプレーン
 		1000.0f);
 	m_pCameraFromLight = new CCamera();
-	m_pPlayer = new CPlayer(m_pCamera,m_pCameraFromLight);
+	m_pPlayer = new CPlayer(m_pCamera,m_pCameraFromLight,m_pLight);
 	if (!sts) {
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
@@ -400,7 +400,7 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 		m_pPlayer->GetWorldMatrix()._42,
 		m_pPlayer->GetWorldMatrix()._43);
 	D3DXVECTOR3 up(0, 1, 0);
-	D3DXVECTOR3 light_dir(g_light_dir.x, g_light_dir.y, g_light_dir.z);
+	D3DXVECTOR3 light_dir(m_pLight->GetDirection().x, m_pLight->GetDirection().y, m_pLight->GetDirection().z);
 	D3DXVECTOR4 camerapos;
 
 	m_pCameraFromLight->SetCameraView(light_dir, playerpos);
@@ -421,9 +421,8 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 	m_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &g_light_dir);
 
 
-	camerapos = g_light_pos;
-	camerapos.w = 1.0f;
-
+	CStaticMethod::Vec3ToVec4(camerapos, m_pLight->GetPos(), 1.0f);
+	
 	m_pShadowShader->GetPSTable()->SetVector(lpdevice, "g_camerapos", &camerapos);
 
 	// ビューポート
@@ -449,43 +448,7 @@ void CGame::CreateShadowMap(LPDIRECT3DDEVICE9 lpdevice) {
 
 void CGame::DrawPlayer()
 {
-	LPDIRECT3DDEVICE9 lpdevice = m_DXGrobj->GetDXDevice();
-	D3DXVECTOR4 tempVec;
-	lpdevice->SetVertexShader(m_pPlayerShader->GetVertexShader());
-	lpdevice->SetPixelShader(m_pPlayerShader->GetPixelShader());
-
-
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &m_pPlayer->GetWorldMatrix());
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &m_pCamera->GetViewMatrix());
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &m_pCamera->GetProjectionMatrix());
-
-
-	CStaticMethod::Vec3ToVec4(tempVec, m_pCamera->GetCameraPos(), 0.0f);
-
-
-	m_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
-	m_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
-
-	tempVec = g_light_dir;
-	tempVec.w = 1.0f;
-
-	m_pPlayerShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
-	m_pPlayerShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
-	m_pPlayerShader->GetVSTable()->SetBool(lpdevice, "drawguideline", false);
-	m_pPlayerShader->GetPSTable()->SetBool(lpdevice, "drawguideline", false);
-
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &m_pCameraFromLight->GetViewMatrix());
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposprojection", &m_pCameraFromLight->GetProjectionMatrix());
-	m_pPlayerShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
-
-
-	int toonindex = m_pPlayerShader->GetPSTable()->GetSamplerIndex("ToonSampler1");
-	lpdevice->SetSamplerState(toonindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	lpdevice->SetTexture(toonindex, *m_pPlayer->GetTexture(TEXTURETYPES::TOON));
-	int index = m_pPlayerShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
-	lpdevice->SetTexture(index, *m_pPlayer->GetTexture(TEXTURETYPES::SHADOW));
-
-	m_pPlayer->DrawWithShader(lpdevice, m_pPlayerShader->GetVSTable(), m_pPlayerShader->GetPSTable());
+	
 }
 
 void CGame::DrawLand()
@@ -513,8 +476,8 @@ void CGame::DrawLand()
 	m_pLandShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 	m_pLandShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
 
-	tempVec = g_light_dir;
-	tempVec.w = 0.0f;
+	tempVec = m_pLight->GetDirection();
+	tempVec.w = 1.0f;
 
 	m_pLandShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
 	m_pLandShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);

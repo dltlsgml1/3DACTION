@@ -15,7 +15,7 @@ protected:
 	
 
 public:
-	CPlayer(CCamera *Camera,CCamera *CameraFromLight);
+	CPlayer(CCamera *Camera,CCamera *CameraFromLight,CLight *Light);
 	~CPlayer();
 
 	void Draw(LPDIRECT3DDEVICE9 lpdevice,

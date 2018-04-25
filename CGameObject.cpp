@@ -158,3 +158,8 @@ void CGameObject::DrawWithShader(LPDIRECT3DDEVICE9 lpdevice, LPD3DXCONSTANTTABLE
 		m_lpmesh->DrawSubset(i);
 	}
 }
+
+void CGameObject::SetInstance(int Num, void *Instance)
+{
+	InstanceAdr[Num] = Instance;
+}
