@@ -9,6 +9,8 @@
 #include "CDebug.h"
 #include "CDirectInput.h"
 #include "CLight.h"
+#include "ClassInstance.h"
+
 
 #include <Windows.h>
 #include <thread>

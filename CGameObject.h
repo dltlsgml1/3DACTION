@@ -1,6 +1,8 @@
 #pragma once
 #include "CDirect3DXFile.h"
 #include "CStaticMethod.h"
+#include "CLight.h"
+#include "CCamera.h"
 
 enum class TEXTURETYPES
 {
@@ -33,7 +35,10 @@ protected:
 	LPDIRECT3DSURFACE9 m_ShadowSurface;
 	LPDIRECT3DSURFACE9 m_ZBufferSurface;
 
-	void *InstanceAdr[10];
+	CLight *light = nullptr;
+	void *InstanceAdr[20];
+
+
 	
 public:
 	//Set:すぐその値にセットする
@@ -62,7 +67,7 @@ public:
 		LPD3DXCONSTANTTABLE VSTable,
 		LPD3DXCONSTANTTABLE	PSTable);
 
-	
+	void SetInstance(void *Instance[]);
 
 
 	CGameObject();

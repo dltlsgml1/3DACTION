@@ -1,6 +1,5 @@
 #pragma once
-class CInstance
+struct Instance
 {
-public:
-	
+	void *InstanceAdr[20];
 };

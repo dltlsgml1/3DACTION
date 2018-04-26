@@ -159,7 +159,14 @@ void CGameObject::DrawWithShader(LPDIRECT3DDEVICE9 lpdevice, LPD3DXCONSTANTTABLE
 	}
 }
 
-void CGameObject::SetInstance(int Num, void *Instance)
+void CGameObject::SetInstance(void *Instance[])
 {
-	InstanceAdr[Num] = Instance;
+	void* insadr[10];
+
+	insadr[0] = Instance[0];
+	insadr[1] = Instance[1];
+
+	CCamera *ins;
+	ins = (CCamera*)insadr[1];
+	D3DXVECTOR3 pos = ins->GetCameraPos();
 }

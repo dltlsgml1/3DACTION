@@ -7,7 +7,6 @@ CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight,CLight *Light)
 	m_pCamera = Camera;
 	m_pCameraFromLight = CameraFromLight;
 	m_pLight = Light;
-	m_Light_dir = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);
 	m_MatUV = {
 		0.5f,  0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,

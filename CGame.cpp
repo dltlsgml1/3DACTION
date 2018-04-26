@@ -156,9 +156,10 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	m_GameMainThread = std::thread(&CGame::GameMain,this);
 	
 	m_pLand->AddTangentSpace(m_DXGrobj->GetDXDevice());
-
+	
+	
 	m_pInput->InitInput(hinst, hwnd);
-
+	
 	D3DXCreateTextureFromFile(m_DXGrobj->GetDXDevice(), "ToonPaint.png", m_pPlayer->GetTexture(TEXTURETYPES::TOON));
 	D3DXCreateTextureFromFile(m_DXGrobj->GetDXDevice(), "yukanormal.tga", m_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
 	return	true;
@@ -240,8 +241,6 @@ void CGame::GameInput() {
 //==============================================================================
 void CGame::GameUpdate() {
 
-	//g_pCamera->UpdateCameraView(D3DXVECTOR3(0.0f, 0.01f, -0.01f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 	D3DXVECTOR4 camerapos = D3DXVECTOR4(m_pCamera->GetCameraPos().x,
 		m_pCamera->GetCameraPos().y,
 		m_pCamera->GetCameraPos().z,
@@ -261,9 +260,9 @@ void CGame::GameUpdate() {
 	D3DXVec4Transform(&m_pLight->GetInvDirection(), &m_pLight->GetDirection(), &m_pLand->GetInvMat());
 	D3DXVec4Transform(&m_pCamera->GetInvCameraPos(), &camerapos, &m_pLand->GetInvMat());
 	D3DXVec4Transform(&m_pLand->GetInvPos(), &pos, &m_pLand->GetInvMat());
-	/*D3DXVec4Transform(&inv_light_dir, &g_light_dir, &g_InvMatLand);
-	D3DXVec4Transform(&inv_camera_pos, &camerapos, &g_InvMatLand);
-	D3DXVec4Transform(&inv_pos, &pos, &g_InvMatLand);*/
+
+
+
 }
 
 //==============================================================================
@@ -273,6 +272,15 @@ void CGame::GameUpdate() {
 //!	@retval	‚È‚µ
 //==============================================================================
 void CGame::GameRender() {
+
+	void *instance[20];
+
+	D3DXVECTOR3 pos = m_pCameraFromLight->GetCameraPos();
+	instance[0] = m_pCamera;
+	instance[1] = m_pCamera;
+	instance[2] = m_pLight;
+	m_pPlayer->SetInstance(instance);
+
 
 	m_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 	m_DXGrobj->GetDXDevice()->BeginScene();
@@ -296,7 +304,6 @@ void CGame::GameRender() {
 		m_pPlayerShader->GetPixelShader(),
 		m_pPlayerShader->GetPSTable());
 	
-	//DrawPlayer();
 
 	m_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	m_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &m_pLand->GetWorldMatrix());
