@@ -9,7 +9,7 @@
 #include "CDebug.h"
 #include "CDirectInput.h"
 #include "CLight.h"
-#include "ClassInstance.h"
+#include "CLand.h"
 
 
 #include <Windows.h>
@@ -19,6 +19,9 @@
 #define		RADIAN(x)		D3DX_PI*(x)/180.0f
 #define		TEXMAP_SIZE		4096*2
 #define		NUM_INSTANCE	20
+
+
+
 class CGame
 {
 private:
@@ -36,7 +39,7 @@ private:
 
 	CLight				*m_pLight;
 	CDirectXGraphics	*m_DXGrobj = nullptr;		// DirectX Graphicsオブジェクト
-	CGameObject			*m_pLand = nullptr;
+	CLand				*m_pLand = nullptr;
 
 	D3DXMATRIX			g_InvMatLand;		//地形の逆行列
 	D3DXMATRIX  g_matuv = {

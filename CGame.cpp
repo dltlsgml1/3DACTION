@@ -66,7 +66,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 {
 	bool sts;
 	m_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
-	m_pLand = new CGameObject();
+	m_pLand = new CLand();
 	
 	m_pInput = new CDirectInput();
 	sts = m_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
@@ -131,8 +131,6 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 		return false;
 	}
 
-	// カメラ変換行列作成
-
 
 	// Ｚバッファ有効
 	m_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
@@ -163,10 +161,15 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	m_pLand->AddTangentSpace(m_DXGrobj->GetDXDevice());
 	
 	
-	InstanceAdr[0] = m_pCamera;
-	InstanceAdr[1] = m_pCameraFromLight;
-	InstanceAdr[2] = m_pLight;
+	InstanceAdr[CAMERA] = m_pCamera;
+	InstanceAdr[CAMERAFROMLIGHT] = m_pCameraFromLight;
+	InstanceAdr[LIGHT] = m_pLight;
+	InstanceAdr[PLAYERSHADER] = m_pPlayerShader;
+	InstanceAdr[LANDSHADER] = m_pLandShader;
+	InstanceAdr[SHADOWSHADER] = m_pShadowShader;
 	m_pPlayer->SetInstance(InstanceAdr);
+	m_pLand->SetInstance(InstanceAdr);
+
 	m_pInput->InitInput(hinst, hwnd);
 	
 	D3DXCreateTextureFromFile(m_DXGrobj->GetDXDevice(), "ToonPaint.png", m_pPlayer->GetTexture(TEXTURETYPES::TOON));
@@ -249,12 +252,7 @@ void CGame::GameInput() {
 //!	@retval	なし
 //==============================================================================
 void CGame::GameUpdate() {
-
-	D3DXVECTOR4 camerapos = D3DXVECTOR4(m_pCamera->GetCameraPos().x,
-		m_pCamera->GetCameraPos().y,
-		m_pCamera->GetCameraPos().z,
-		0.0f);
-	
+	D3DXVECTOR4 camerapos = D3DXVECTOR4(m_pCamera->GetCameraPos(),0.0f);
 	m_pInput->UpdateInput();
 
 	static int angle = 0;
@@ -269,9 +267,6 @@ void CGame::GameUpdate() {
 	D3DXVec4Transform(&m_pLight->GetInvDirection(), &m_pLight->GetDirection(), &m_pLand->GetInvMat());
 	D3DXVec4Transform(&m_pCamera->GetInvCameraPos(), &camerapos, &m_pLand->GetInvMat());
 	D3DXVec4Transform(&m_pLand->GetInvPos(), &pos, &m_pLand->GetInvMat());
-
-
-
 }
 
 //==============================================================================
@@ -281,8 +276,6 @@ void CGame::GameUpdate() {
 //!	@retval	なし
 //==============================================================================
 void CGame::GameRender() {
-
-	
 
 
 	m_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
@@ -310,7 +303,11 @@ void CGame::GameRender() {
 
 	m_DXGrobj->GetDXDevice()->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	m_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &m_pLand->GetWorldMatrix());
-	DrawLand();
+	m_pLand->Draw(m_DXGrobj->GetDXDevice(),
+		m_pLandShader->GetVertexShader(),
+		m_pLandShader->GetVSTable(),
+		m_pLandShader->GetPixelShader(),
+		m_pLandShader->GetPSTable());
 
 	m_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
 
@@ -463,43 +460,7 @@ void CGame::DrawPlayer()
 
 void CGame::DrawLand()
 {
-	LPDIRECT3DDEVICE9 lpdevice = m_DXGrobj->GetDXDevice();
-	D3DXVECTOR4 tempVec;
-	lpdevice->SetVertexShader(m_pLandShader->GetVertexShader());
-	lpdevice->SetPixelShader(m_pLandShader->GetPixelShader());
-
-	int normalindex = m_pLandShader->GetPSTable()->GetSamplerIndex("NormalSampler");
-	lpdevice->SetSamplerState(normalindex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	lpdevice->SetTexture(normalindex, *m_pLand->GetTexture(TEXTURETYPES::NORMALMAP));
-
-
-	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_world", &m_pLand->GetWorldMatrix());
-	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_view", &m_pCamera->GetViewMatrix());
-	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_projection", &m_pCamera->GetProjectionMatrix());
-
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_pos", &m_pLand->GetInvPos());
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_camera_pos", &m_pCamera->GetInvCameraPos());
-	m_pLandShader->GetVSTable()->SetVector(m_DXGrobj->GetDXDevice(), "g_inv_light_dir", &m_pLight->GetInvDirection());
-
-	CStaticMethod::Vec3ToVec4(tempVec, m_pCamera->GetCameraPos(), 0.0f);
-
-	m_pLandShader->GetVSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
-	m_pLandShader->GetPSTable()->SetVector(lpdevice, "g_camera_pos", &tempVec);
-
-	tempVec = m_pLight->GetDirection();
-	tempVec.w = 1.0f;
-
-	m_pLandShader->GetVSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
-	m_pLandShader->GetPSTable()->SetVector(lpdevice, "g_light_dir", &tempVec);
-
-
-	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_lightposcamera", &m_pCameraFromLight->GetViewMatrix());
-	m_pLandShader->GetPSTable()->SetMatrix(lpdevice, "g_lightposprojection", &m_pCameraFromLight->GetProjectionMatrix());
-	m_pLandShader->GetVSTable()->SetMatrix(lpdevice, "g_matuv", &g_matuv);
-
-	int index = m_pLandShader->GetPSTable()->GetSamplerIndex("ShadowSampler");
-	lpdevice->SetTexture(index, *m_pLand->GetTexture(TEXTURETYPES::SHADOW));
-	m_pLand->DrawWithShader(lpdevice, m_pLandShader->GetVSTable(), m_pLandShader->GetPSTable());
+	
 }
 
 void CGame::DrawDebug()

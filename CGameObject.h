@@ -18,6 +18,15 @@ enum class SURFACETYPES
 	ZBUFFER
 };
 
+enum INSTANCELIST
+{
+	CAMERA,
+	CAMERAFROMLIGHT,
+	LIGHT,
+	PLAYERSHADER,
+	LANDSHADER,
+	SHADOWSHADER
+};
 class CGameObject : public CDirect3DXFile
 {
 protected:
