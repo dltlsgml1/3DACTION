@@ -7,14 +7,12 @@
 class CPlayer : public CGameObject
 {
 protected:
-	CCamera *m_pCamera;
-	CCamera *m_pCameraFromLight;
-	CLight  *m_pLight;
+	
 	D3DXMATRIX m_MatUV;
 	
 
 public:
-	CPlayer(CCamera *Camera,CCamera *CameraFromLight,CLight *Light);
+	CPlayer();
 	~CPlayer();
 
 	void Draw(LPDIRECT3DDEVICE9 lpdevice,

@@ -18,6 +18,7 @@
 #define		SCREEN_Y		720
 #define		RADIAN(x)		D3DX_PI*(x)/180.0f
 #define		TEXMAP_SIZE		4096*2
+#define		NUM_INSTANCE	20
 class CGame
 {
 private:
@@ -57,6 +58,7 @@ private:
 	CDebug			*m_pDebug = nullptr;
 	CDirectInput	*m_pInput = nullptr;
 
+	void			*InstanceAdr[NUM_INSTANCE];
 
 
 public:

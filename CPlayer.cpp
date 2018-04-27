@@ -1,12 +1,9 @@
 #include "CPlayer.h"
 
 
-CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight,CLight *Light)
+CPlayer::CPlayer()
 {
 	
-	m_pCamera = Camera;
-	m_pCameraFromLight = CameraFromLight;
-	m_pLight = Light;
 	m_MatUV = {
 		0.5f,  0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
@@ -16,8 +13,7 @@ CPlayer::CPlayer(CCamera *Camera, CCamera *CameraFromLight,CLight *Light)
 }
 CPlayer::~CPlayer()
 {
-	m_pCamera = nullptr;
-	m_pCameraFromLight = nullptr;
+	
 }
 
 void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
@@ -26,7 +22,14 @@ void CPlayer::Draw(LPDIRECT3DDEVICE9 lpdevice,
 	LPDIRECT3DPIXELSHADER9 PSShader,
 	LPD3DXCONSTANTTABLE	PSTable)
 {
-	
+	CCamera *m_pCamera;
+	CCamera *m_pCameraFromLight;
+	CLight  *m_pLight;
+	m_pCamera = (CCamera*)InstanceAdr[0];
+	m_pCameraFromLight = (CCamera*)InstanceAdr[1];
+	m_pLight = (CLight*)InstanceAdr[2];
+
+
 	D3DXVECTOR4 tempVec;
 	lpdevice->SetVertexShader(VSShader);
 	lpdevice->SetPixelShader(PSShader);

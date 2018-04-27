@@ -27,6 +27,11 @@ CGame::CGame()
 		0.5f,  0.5f, 0.0f, 1.0f
 	};
 
+	for (int i = 0; i < NUM_INSTANCE; i++)
+	{
+		InstanceAdr[i] = nullptr;
+	}
+
 }
 
 CGame::~CGame()
@@ -81,7 +86,7 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 		0.1f,						// ニアプレーン
 		1000.0f);
 	m_pCameraFromLight = new CCamera();
-	m_pPlayer = new CPlayer(m_pCamera,m_pCameraFromLight,m_pLight);
+	m_pPlayer = new CPlayer();
 	if (!sts) {
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
@@ -158,6 +163,10 @@ bool CGame::GameInit(HINSTANCE hinst, HWND hwnd, int width, int height, bool ful
 	m_pLand->AddTangentSpace(m_DXGrobj->GetDXDevice());
 	
 	
+	InstanceAdr[0] = m_pCamera;
+	InstanceAdr[1] = m_pCameraFromLight;
+	InstanceAdr[2] = m_pLight;
+	m_pPlayer->SetInstance(InstanceAdr);
 	m_pInput->InitInput(hinst, hwnd);
 	
 	D3DXCreateTextureFromFile(m_DXGrobj->GetDXDevice(), "ToonPaint.png", m_pPlayer->GetTexture(TEXTURETYPES::TOON));
@@ -273,13 +282,7 @@ void CGame::GameUpdate() {
 //==============================================================================
 void CGame::GameRender() {
 
-	void *instance[20];
-
-	D3DXVECTOR3 pos = m_pCameraFromLight->GetCameraPos();
-	instance[0] = m_pCamera;
-	instance[1] = m_pCamera;
-	instance[2] = m_pLight;
-	m_pPlayer->SetInstance(instance);
+	
 
 
 	m_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
